@@ -1,2 +1,2 @@
-# cmsc127
+# CMSC 127 Final Project
 Beta University Annual Funds

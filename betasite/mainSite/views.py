@@ -5,5 +5,5 @@ from django.views.generic import TemplateView
 # Create your views here.
 
 class HomePage(TemplateView):
-	template_name = 'mainSite/home.html'
+	template_name = 'mainSite\home.html'
 

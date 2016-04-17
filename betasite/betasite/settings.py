@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mainSite',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -80,9 +81,9 @@ WSGI_APPLICATION = 'betasite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'djangogirls',
-        'USER': 'name',
-        'PASSWORD': '',
+        'NAME': 'pet_clinic',
+        'USER': 'postgres',
+        'PASSWORD': 'trademark102696',
         'HOST': 'localhost',
         'PORT': '',
     }

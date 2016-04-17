@@ -22,7 +22,7 @@
 	<div class="ui small inverted modal">
 		<div class="header">Login</div>
 		<div class="content">
-			<form class="ui form" id="login">
+			<form class="ui form" id="loginForm">
 				<div class="field">
 					<label for="username">Username</label>
 					<input type="text" id="username" placeholder="Username">
@@ -35,8 +35,8 @@
 		</div>
 		<div class="actions">
 			<div class="two fluid ui buttons">
-				<div class="ui green button" type="submit" form="login">Log-in</div>
-				<div class="ui red button">Cancel</div>
+				<div class="ui green button" id="auth">Log-in</div>
+				<div class="ui red button" id="cancel">Cancel</div>
 			</div>
 		</div>
 	</div>
@@ -44,6 +44,12 @@
 		$('#login').click(function() {
 			$('.small.modal').modal('show');
 		});
+		$('#cancel').click(function() {
+			$('.small.modal').modal('hide');
+		});
+		$('#auth').click(function() {
+			$('#loginForm').submit();
+		})
 	</script>
 	{% block script %}{% endblock %}
 </body>

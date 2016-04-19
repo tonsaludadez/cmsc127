@@ -1,0 +1,66 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Home{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+	<div class="ui five column grid">
+		<div class="row"></div>
+		<div class="row">
+			<div class="column"></div>
+			<div class="column">
+				<h2>Events</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="column"></div>
+			<div class="twelve wide column">
+				<table class="ui single line table">
+				  <thead>
+				    <tr>
+				      <th>Event ID</th>
+				      <th>Event Name</th>
+				      <th>Event Date</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				  	{% for event in object_list %}
+					    <tr>
+					      <td><a href="#">{{ event.eventid }}</a></td>
+					      <td>{{ event.event_name }}</td>
+					      <td>{{ event.event_date }}</td>
+					    </tr>
+					{% endfor %}
+				  </tbody>
+				   <tfoot>
+				    <tr>
+				    	<th colspan="10">
+				    		<div class="ui left floated small primary labeled icon button" id="addEvent">
+					        	<i class="calendar icon"></i> Add New Event
+					        </div>
+					      	<div class="ui right floated pagination menu">
+					        	<a class="icon item">
+					          		<i class="left chevron icon"></i>
+						       	</a>
+						    	<div class="item">1 of 1</div>
+					        	<a class="icon item">
+					         		<i class="right chevron icon"></i>
+					        	</a>
+					      	</div>
+					    </th>
+				  	</tr>
+				  </tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		$('#addEvent').click(function() {
+			location.href = "{% url 'addEvent' %}";
+		});
+	</script>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Add Event{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+		<div class="ui five column grid">
+			<div class="row"></div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="column">
+					<h2>Add New Event</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="twelve wide column">
+					<form class="ui form">
+						<h4 class="ui dividing header">Event Info</h4>
+						<div class="field">
+							<label>Name</label>
+						</div>
+						<div class="four wide field">
+							<input type="text" placeholder="Event Name">
+						</div>
+						<div class="ui button" tabindex="0">Add Event</div>
+					</form>
+				</div>
+			</div>
+		</div>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

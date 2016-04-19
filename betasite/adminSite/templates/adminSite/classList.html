@@ -1,0 +1,58 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Home{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+		<div class="ui five column grid">
+			<div class="row"></div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="column">
+					<h2>Classes</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="twelve wide column">
+					<table class="ui single line table">
+					  <thead>
+					    <tr>
+					      <th>Class Year</th>
+					      <th>Class Coordinator</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  	{% for class in object_list %}
+					    <tr>
+					      <td><a href="#">{{ class.classyear }}</a></td>
+					      <td>{{ class.coordinator }}</td>
+					    </tr>
+					    {% endfor %}
+					  </tbody>
+					   <tfoot>
+					    <tr>
+					    	<th colspan="10">
+					    		<div class="ui left floated small primary labeled icon button" id="addDonation">
+						        	<i class="users icon"></i> Add Class
+						        </div>
+						      	<div class="ui right floated pagination menu">
+						        	<a class="icon item">
+						          		<i class="left chevron icon"></i>
+							       	</a>
+							    	<div class="item">1 of 1</div>
+						        	<a class="icon item">
+						         		<i class="right chevron icon"></i>
+						        	</a>
+						      	</div>
+						    </th>
+					  	</tr>
+					  </tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

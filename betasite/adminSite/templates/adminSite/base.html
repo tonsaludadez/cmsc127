@@ -1,0 +1,41 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}Beta University Admin Page{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'adminSite/dist/semantic.min.css' %}">
+	<script type="text/javascript" src="{% static 'adminSite/js/jquery-1.11.2.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'adminSite/dist/semantic.min.js' %}"></script>
+	{% block style %}{% endblock %}
+</head>
+<body>
+	<div class="ui left fixed inverted vertical menu">
+		<a href="{% url 'adminHome' %}" class="header item">Beta University</a>
+		<div class="item">
+			<div class="header">Tables</div>
+			<div class="menu">
+				<a href="{% url 'donorList' %}" class="item">Donors</a>
+				<a href="{% url 'eventList' %}" class="item">Events</a>
+				<a href="{% url 'donationList' %}" class="item">Donations</a>
+				<a href="{% url 'classesList' %}" class="item">Classes</a>
+			</div>
+		</div>
+		<div class="item">
+			<div class="header">Reports</div>
+			<div class="menu">
+				<a href="" class="item">Annual Report</a>
+				<a href="" class="item">Monthly Report</a>
+				<a href="" class="item">Due Payments</a>
+				<a href="" class="item">Event Report</a>
+				<a href="" class="item">Coordinator's Class List</a>
+				<a href="" class="item">Potential Donors</a>
+			</div>
+		</div>
+		<a href="" class="item">Logout</a>
+	</div>
+	<div class="pusher">
+		{% block content %}{% endblock %}
+	</div>
+	{% block scripts %}{% endblock %}
+</body>
+</html>

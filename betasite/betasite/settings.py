@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainSite',
+    'adminSite',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -75,10 +76,21 @@ WSGI_APPLICATION = 'betasite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'beta_university',
+        'USER': 'postgres',
+        'PASSWORD': 'trademark102696',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 

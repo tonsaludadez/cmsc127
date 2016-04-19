@@ -1,0 +1,67 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Donors{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+		<div class="ui five column grid">
+			<div class="row"></div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="column">
+					<h2>Donors</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="twelve wide column">
+					<table class="ui single line table">
+					  <thead>
+					    <tr>
+					      <th>Donor ID</th>
+					      <th>Donor Name</th>
+					      <th>Date Last Payed</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  	{% for donor in object_list %}
+						    <tr>
+						      <td><a href="#">{{ donor.donorid }}</a></td>
+						      <td>{{ donor.fname }} {{donor.lname}} </td>
+						      <td>10/26/2013</td>
+						    </tr>
+					    {% endfor %}
+					  </tbody>
+					   <tfoot>
+					    <tr>
+					    	<th colspan="10">
+					    		<div class="ui left floated small primary labeled icon button" id="addDonor">
+						        	<i class="user icon"></i> Add New Donor
+						        </div>
+						      	<div class="ui right floated pagination menu">
+						        	<a class="icon item">
+						          		<i class="left chevron icon"></i>
+							       	</a>
+							    	<div class="item">1 of 1</div>
+						        	<a class="icon item">
+						         		<i class="right chevron icon"></i>
+						        	</a>
+						      	</div>
+						    </th>
+					  	</tr>
+					  </tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		$('#addDonor').click(function() {
+			location.href = "{% url 'addDonor' %}";
+			console.log("{% url 'addDonor' %}");
+		});
+	</script>
+{% endblock %}

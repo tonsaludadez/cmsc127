@@ -3,3 +3,74 @@ from __future__ import unicode_literals
 from django.db import models
 
 # Create your models here.
+
+class Class(models.Model):
+    classyear = models.DecimalField(primary_key=True, max_digits=4, decimal_places=0)
+    coordinator = models.ForeignKey('Donor', models.DO_NOTHING, db_column='coordinator', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'class'
+
+class Donation(models.Model):
+    donationno = models.DecimalField(primary_key=True, max_digits=12, decimal_places=0)
+    donorid = models.ForeignKey('Donor', models.DO_NOTHING, db_column='donorid', blank=True, null=True)
+    amount = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)
+    paymethod = models.CharField(max_length=1, blank=True, null=True)
+    installments = models.IntegerField(blank=True, null=True)
+    pledge_date = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'donation'
+
+class Donor(models.Model):
+    donorid = models.DecimalField(primary_key=True, max_digits=9, decimal_places=0)
+    fname = models.CharField(max_length=30, blank=True, null=True)
+    mname = models.CharField(max_length=30, blank=True, null=True)
+    lname = models.CharField(max_length=30, blank=True, null=True)
+    contactno = models.CharField(max_length=12, blank=True, null=True)
+    creditno = models.DecimalField(max_digits=16, decimal_places=0, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
+    donor_affiliation = models.ForeignKey('self', models.DO_NOTHING, db_column='donor_affiliation', blank=True, null=True)
+    class_field = models.ForeignKey(Class, models.DO_NOTHING, db_column='class', blank=True, null=True)  # Field renamed because it was a Python reserved word.
+    category = models.CharField(max_length=20, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'donor'
+
+
+class EventDonation(models.Model):
+    eventid = models.ForeignKey('Events', models.DO_NOTHING, db_column='eventid')
+    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid')
+    donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno')
+
+    class Meta:
+        managed = False
+        db_table = 'event_donation'
+        unique_together = (('eventid', 'donorid', 'donationno'),)
+
+
+class Events(models.Model):
+    eventid = models.DecimalField(primary_key=True, max_digits=5, decimal_places=0)
+    event_name = models.CharField(max_length=30, blank=True, null=True)
+    event_date = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'events'
+
+
+class Transaction(models.Model):
+    transactionid = models.BigIntegerField(primary_key=True)
+    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', blank=True, null=True)
+    donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno', blank=True, null=True)
+    date_paid = models.DateField(blank=True, null=True)
+    time_paid = models.TimeField(blank=True, null=True)
+    amount_paid = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'transaction'
+

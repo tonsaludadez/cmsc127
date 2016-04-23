@@ -12,6 +12,9 @@ class Class(models.Model):
         managed = False
         db_table = 'class'
 
+    def __str__(self):
+    	return str(self.classyear)
+
 class Donation(models.Model):
     donationno = models.DecimalField(primary_key=True, max_digits=12, decimal_places=0)
     donorid = models.ForeignKey('Donor', models.DO_NOTHING, db_column='donorid', blank=True, null=True)
@@ -23,6 +26,9 @@ class Donation(models.Model):
     class Meta:
         managed = False
         db_table = 'donation'
+
+    def __str__(self):
+    	return str(self.donationno)
 
 class Donor(models.Model):
     donorid = models.DecimalField(primary_key=True, max_digits=9, decimal_places=0)
@@ -40,6 +46,9 @@ class Donor(models.Model):
         managed = False
         db_table = 'donor'
 
+    def __str__(self):
+    	return self.fname + " " + self.lname
+
 
 class EventDonation(models.Model):
     eventid = models.ForeignKey('Events', models.DO_NOTHING, db_column='eventid')
@@ -51,6 +60,9 @@ class EventDonation(models.Model):
         db_table = 'event_donation'
         unique_together = (('eventid', 'donorid', 'donationno'),)
 
+    def __str__(self):
+    	return self.eventid
+
 
 class Events(models.Model):
     eventid = models.DecimalField(primary_key=True, max_digits=5, decimal_places=0)
@@ -61,11 +73,14 @@ class Events(models.Model):
         managed = False
         db_table = 'events'
 
+    def __str__(self):
+    	return str(self.eventid)
+
 
 class Transaction(models.Model):
     transactionid = models.BigIntegerField(primary_key=True)
-    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', blank=True, null=True)
-    donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno', blank=True, null=True)
+    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', blank=True, null=True, related_name='transactions')
+    donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno', blank=True, null=True, related_name='transactions')
     date_paid = models.DateField(blank=True, null=True)
     time_paid = models.TimeField(blank=True, null=True)
     amount_paid = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)
@@ -73,4 +88,7 @@ class Transaction(models.Model):
     class Meta:
         managed = False
         db_table = 'transaction'
+
+    def __str__(self):
+    	return str(self.transactionid)
 

@@ -29,7 +29,7 @@
 						    <tr>
 						      <td><a href="#">{{ donor.donorid }}</a></td>
 						      <td>{{ donor.fname }} {{donor.lname}} </td>
-						      <td>10/26/2013</td>
+						      <td>{{ donor.transactions.last.date_paid }}</td>
 						    </tr>
 					    {% endfor %}
 					  </tbody>

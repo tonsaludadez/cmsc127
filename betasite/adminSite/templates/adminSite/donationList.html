@@ -29,11 +29,11 @@
 				  <tbody>
 				    <tr>
 				    {% for donation in object_list %}
-					    <td><a href="#">{{ donation.donationid }}</a></td>
+					    <td><a href="#">{{ donation.donationno }}</a></td>
 					    <td><a href="#">{{ donation.donorid }}</a></td>
-					    <td>400.00PHP</td>
-					    <td>200.00PHP</td>
-					    <td>10/26/2013</td>
+					    <td>{{ donation.amount }}PHP</td>
+					    <td>{{ donation.transactions.last.amount_paid }}PHP</td>
+					    <td>{{ donation.transactions.all.last.date_paid }}</td>
 				    {% endfor %}
 				    </tr>
 				  </tbody>

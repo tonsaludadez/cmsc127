@@ -16,7 +16,7 @@ class Class(models.Model):
     	return str(self.classyear)
 
 class Donation(models.Model):
-    donationno = models.DecimalField(primary_key=True, max_digits=12, decimal_places=0)
+    donationno = models.AutoField(primary_key=True)
     donorid = models.ForeignKey('Donor', models.DO_NOTHING, db_column='donorid', blank=True, null=True)
     amount = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)
     paymethod = models.CharField(max_length=1, blank=True, null=True)
@@ -31,7 +31,7 @@ class Donation(models.Model):
     	return str(self.donationno)
 
 class Donor(models.Model):
-    donorid = models.DecimalField(primary_key=True, max_digits=9, decimal_places=0)
+    donorid = models.AutoField(primary_key=True)
     fname = models.CharField(max_length=30, blank=True, null=True)
     mname = models.CharField(max_length=30, blank=True, null=True)
     lname = models.CharField(max_length=30, blank=True, null=True)
@@ -65,7 +65,7 @@ class EventDonation(models.Model):
 
 
 class Events(models.Model):
-    eventid = models.DecimalField(primary_key=True, max_digits=5, decimal_places=0)
+    eventid = models.AutoField(primary_key=True)
     event_name = models.CharField(max_length=30, blank=True, null=True)
     event_date = models.DateField(blank=True, null=True)
 
@@ -78,9 +78,9 @@ class Events(models.Model):
 
 
 class Transaction(models.Model):
-    transactionid = models.BigIntegerField(primary_key=True)
-    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', blank=True, null=True, related_name='transactions')
-    donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno', blank=True, null=True, related_name='transactions')
+    transactionid = models.AutoField(primary_key=True)
+    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', blank=True, null=True)
+    donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno', blank=True, null=True)
     date_paid = models.DateField(blank=True, null=True)
     time_paid = models.TimeField(blank=True, null=True)
     amount_paid = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)

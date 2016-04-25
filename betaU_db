@@ -1,0 +1,354 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.1
+-- Dumped by pg_dump version 9.5.1
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: payment; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE payment AS ENUM (
+    'Installments',
+    'Full'
+);
+
+
+ALTER TYPE payment OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: class; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE class (
+    classyear numeric(4,0) NOT NULL,
+    coordinator integer
+);
+
+
+ALTER TABLE class OWNER TO postgres;
+
+--
+-- Name: donation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE donation (
+    donationno serial NOT NULL,
+    donorid integer,
+    amount numeric(13,2),
+    paymethod character varying,
+    installments integer DEFAULT 1,
+    pledge_date date
+);
+
+
+ALTER TABLE donation OWNER TO postgres;
+
+--
+-- Name: donor; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE donor (
+    donorid serial NOT NULL,
+    fname character varying(30),
+    mname character varying(30),
+    lname character varying(30),
+    contactno character varying(12),
+    creditno numeric(16,0),
+    email character varying(50),
+    donor_affiliation integer,
+    class numeric(4,0),
+    category character varying(20)
+);
+
+
+ALTER TABLE donor OWNER TO postgres;
+
+--
+-- Name: event_donation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE event_donation (
+    eventid integer NOT NULL,
+    donorid integer NOT NULL,
+    donationno integer NOT NULL
+);
+
+
+ALTER TABLE event_donation OWNER TO postgres;
+
+--
+-- Name: events; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE events (
+    eventid serial NOT NULL,
+    event_name character varying(30),
+    event_date date
+);
+
+
+ALTER TABLE events OWNER TO postgres;
+
+--
+-- Name: transaction; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE transaction (
+    transactionid serial NOT NULL,
+    donorid integer,
+    donationno integer,
+    date_paid date,
+    time_paid time without time zone,
+    amount_paid numeric(13,2)
+);
+
+
+ALTER TABLE transaction OWNER TO postgres;
+
+--
+-- Name: transaction_transactionid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE transaction_transactionid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE transaction_transactionid_seq OWNER TO postgres;
+
+--
+-- Name: transaction_transactionid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE transaction_transactionid_seq OWNED BY transaction.transactionid;
+
+
+--
+-- Name: transactionid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transaction ALTER COLUMN transactionid SET DEFAULT nextval('transaction_transactionid_seq'::regclass);
+
+
+--
+-- Data for Name: class; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY class (classyear, coordinator) FROM stdin;
+\.
+
+
+--
+-- Data for Name: donation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY donation (donationno, donorid, amount, paymethod, installments, pledge_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: donor; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY donor (donorid, fname, mname, lname, contactno, creditno, email, donor_affiliation, class, category) FROM stdin;
+\.
+
+
+--
+-- Data for Name: event_donation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY event_donation (eventid, donorid, donationno) FROM stdin;
+\.
+
+
+--
+-- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY events (eventid, event_name, event_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: transaction; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY transaction (transactionid, donorid, donationno, date_paid, time_paid, amount_paid) FROM stdin;
+\.
+
+
+--
+-- Name: transaction_transactionid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('transaction_transactionid_seq', 1, false);
+
+
+--
+-- Name: class_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY class
+    ADD CONSTRAINT class_pkey PRIMARY KEY (classyear);
+
+
+--
+-- Name: donation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY donation
+    ADD CONSTRAINT donation_pkey PRIMARY KEY (donationno);
+
+
+--
+-- Name: donor_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY donor
+    ADD CONSTRAINT donor_pkey PRIMARY KEY (donorid);
+
+
+--
+-- Name: event_donation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY event_donation
+    ADD CONSTRAINT event_donation_pkey PRIMARY KEY (eventid, donorid, donationno);
+
+
+--
+-- Name: events_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY events
+    ADD CONSTRAINT events_pkey PRIMARY KEY (eventid);
+
+
+--
+-- Name: transaction_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transaction
+    ADD CONSTRAINT transaction_pkey PRIMARY KEY (transactionid);
+
+
+--
+-- Name: class_coordinator_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY class
+    ADD CONSTRAINT class_coordinator_fkey FOREIGN KEY (coordinator) REFERENCES donor(donorid);
+
+
+--
+-- Name: donation_donorid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY donation
+    ADD CONSTRAINT donation_donorid_fkey FOREIGN KEY (donorid) REFERENCES donor(donorid);
+
+
+--
+-- Name: donor_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY donor
+    ADD CONSTRAINT donor_class_fkey FOREIGN KEY (class) REFERENCES class(classyear);
+
+
+--
+-- Name: donor_donor_affiliation_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY donor
+    ADD CONSTRAINT donor_donor_affiliation_fkey FOREIGN KEY (donor_affiliation) REFERENCES donor(donorid);
+
+
+--
+-- Name: event_donation_donationno_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY event_donation
+    ADD CONSTRAINT event_donation_donationno_fkey FOREIGN KEY (donationno) REFERENCES donation(donationno);
+
+
+--
+-- Name: event_donation_donorid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY event_donation
+    ADD CONSTRAINT event_donation_donorid_fkey FOREIGN KEY (donorid) REFERENCES donor(donorid);
+
+
+--
+-- Name: event_donation_eventid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY event_donation
+    ADD CONSTRAINT event_donation_eventid_fkey FOREIGN KEY (eventid) REFERENCES events(eventid);
+
+
+--
+-- Name: transaction_donationno_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transaction
+    ADD CONSTRAINT transaction_donationno_fkey FOREIGN KEY (donationno) REFERENCES donation(donationno);
+
+
+--
+-- Name: transaction_donorid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY transaction
+    ADD CONSTRAINT transaction_donorid_fkey FOREIGN KEY (donorid) REFERENCES donor(donorid);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

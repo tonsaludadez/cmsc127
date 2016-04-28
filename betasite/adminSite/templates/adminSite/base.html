@@ -10,14 +10,14 @@
 </head>
 <body>
 	<div class="ui left fixed inverted vertical menu">
-		<a href="{% url 'adminHome' %}" class="header item">Beta University</a>
+		<a href="{% url 'adminSite:adminHome' %}" class="header item">Beta University</a>
 		<div class="item">
 			<div class="header">Tables</div>
 			<div class="menu">
-				<a href="{% url 'donorList' %}" class="item">Donors</a>
-				<a href="{% url 'eventList' %}" class="item">Events</a>
-				<a href="{% url 'donationList' %}" class="item">Donations</a>
-				<a href="{% url 'classesList' %}" class="item">Classes</a>
+				<a href="{% url 'adminSite:donorList' %}" class="item">Donors</a>
+				<a href="{% url 'adminSite:eventList' %}" class="item">Events</a>
+				<a href="{% url 'adminSite:donationList' %}" class="item">Donations</a>
+				<a href="{% url 'adminSite:classesList' %}" class="item">Classes</a>
 			</div>
 		</div>
 		<div class="item">
@@ -31,7 +31,7 @@
 				<a href="" class="item">Potential Donors</a>
 			</div>
 		</div>
-		<a href="" class="item">Logout</a>
+		<a href="{% url 'adminSite:logout' %}" class="item">Logout</a>
 	</div>
 	<div class="pusher">
 		{% block content %}{% endblock %}

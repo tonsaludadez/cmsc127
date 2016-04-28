@@ -17,7 +17,7 @@ class Class(models.Model):
 
 class Donation(models.Model):
     donationno = models.AutoField(primary_key=True)
-    donorid = models.ForeignKey('Donor', models.DO_NOTHING, db_column='donorid', blank=True, null=True)
+    donorid = models.ForeignKey('Donor', models.DO_NOTHING, db_column='donorid', blank=True, null=True, related_name='donations')
     amount = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)
     paymethod = models.CharField(max_length=1, blank=True, null=True)
     installments = models.IntegerField(blank=True, null=True)
@@ -39,7 +39,7 @@ class Donor(models.Model):
     creditno = models.DecimalField(max_digits=16, decimal_places=0, blank=True, null=True)
     email = models.CharField(max_length=50, blank=True, null=True)
     donor_affiliation = models.ForeignKey('self', models.DO_NOTHING, db_column='donor_affiliation', blank=True, null=True)
-    class_field = models.ForeignKey(Class, models.DO_NOTHING, db_column='class', blank=True, null=True)  # Field renamed because it was a Python reserved word.
+    class_field = models.ForeignKey(Class, models.DO_NOTHING, db_column='class', blank=True, null=True, related_name='donors')  # Field renamed because it was a Python reserved word.
     category = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
@@ -52,7 +52,7 @@ class Donor(models.Model):
 
 class EventDonation(models.Model):
     eventid = models.ForeignKey('Events', models.DO_NOTHING, db_column='eventid')
-    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid')
+    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', related_name='events')
     donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno')
 
     class Meta:
@@ -79,8 +79,8 @@ class Events(models.Model):
 
 class Transaction(models.Model):
     transactionid = models.AutoField(primary_key=True)
-    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', blank=True, null=True)
-    donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno', blank=True, null=True)
+    donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', blank=True, null=True, related_name='transactions')
+    donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno', blank=True, null=True, related_name='transactions')
     date_paid = models.DateField(blank=True, null=True)
     time_paid = models.TimeField(blank=True, null=True)
     amount_paid = models.DecimalField(max_digits=13, decimal_places=2, blank=True, null=True)

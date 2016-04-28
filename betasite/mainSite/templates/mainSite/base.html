@@ -10,8 +10,8 @@
 </head>
 <body>
 	<div class="ui top large fixed inverted menu">
-		<div class="item header"><a href="{% url 'home' %}">Beta University</a></div>
-		<div class="item"><a href="{% url 'about' %}">About Us</a></div>
+		<div class="item header"><a href="{% url 'mainSite:home' %}">Beta University</a></div>
+		<div class="item"><a href="{% url 'mainSite:about' %}">About Us</a></div>
 		<div class="item right">
 			<div class="ui primary button" id="login">Log-in</div>
 		</div>
@@ -22,14 +22,15 @@
 	<div class="ui small modal">
 		<div class="header">Login</div>
 		<div class="content">
-			<form class="ui form" id="loginForm">
+			<form class="ui form" id="loginForm" method="post">
+				{% csrf_token %}
 				<div class="field">
 					<label for="username">Username</label>
-					<input type="text" id="username" placeholder="Username">
+					<input type="text" id="username" placeholder="Username" name="username">
 				</div>
 				<div class="field">
 					<label for="password">Password</label>
-					<input type="password" id="password" placeholder="Password">
+					<input type="password" id="password" placeholder="Password" name="password">
 				</div>
 			</form>
 		</div>

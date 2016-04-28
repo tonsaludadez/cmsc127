@@ -16,34 +16,35 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="twelve wide column">
-					<form class="ui form">
+					<form class="ui form" action="{% url 'adminSite:newDonor' %}" method="post" id="donorForm">
+						{% csrf_token %}
 						<h4 class="ui dividing header">Personal Info</h4>
 						<div class="field">
 							<label>Name</label>
 						</div>
 						<div class="three fields">
 							<div class="field">
-								<input type="text" placeholder="First Name" id="fname">
+								<input type="text" placeholder="First Name" name="fname">
 							</div>
 							<div class="field">
-								<input type="text" placeholder="Middle Name" id="mname">
+								<input type="text" placeholder="Middle Name" name="mname">
 							</div>
 							<div class="field">
-								<input type="text" placeholder="Last Name" id="lname">
+								<input type="text" placeholder="Last Name" name="lname">
 							</div>
 						</div>
 						<div class="field">
 							<label>Address</label>
 						</div>
 						<div class="field">
-							<input type="text" placeholder="Address" id="address">
+							<input type="text" placeholder="Address" name="address">
 						</div>
 						<div class="field">
 							<label>Class Year</label>
 						</div>
 						<div class="field">
 							<div class="ui fluid search selection dropdown">
-								<input type="hidden" name="donor">
+								<input type="hidden" name="class_field">
 								<i class="dropdown icon"></i>
 								<div class="default text">Select Class Year</div>
 								<div class="menu">
@@ -57,11 +58,11 @@
 						<div class="two fields">
 							<div class="field">
 								<label>Contact Number</label>
-								<input type="text" placeholder="Telephone or Cellphone Number" id="contact-no">
+								<input type="text" placeholder="Telephone or Cellphone Number" name="contactno">
 							</div>
 							<div class="field">
 								<label>Email address</label>
-								<input type="text" placeholder="example123@yahoo.com" id="email">
+								<input type="text" placeholder="example123@yahoo.com" name="email">
 							</div>
 						</div>
 						<h4 class="ui dividing header">Payment Info</h4>
@@ -69,9 +70,9 @@
 							<label>Credit Card Number</label>
 						</div>
 						<div class="field">
-							<input type="text" placeholder="Credit Card Number" id="credit-card-no">
+							<input type="text" placeholder="Credit Card Number" name="creditno">
 						</div>
-						<div class="ui button primary" tabindex="0">Add Donor</div>
+						<div class="ui button primary" tabindex="0" id="addButton">Add Donor</div>
 					</form>
 				</div>
 			</div>
@@ -82,5 +83,8 @@
 {% block scripts %}
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
+		$('#addButton').click(function() {
+			$('#donorForm').submit();
+		});
 	</script>
 {% endblock %}

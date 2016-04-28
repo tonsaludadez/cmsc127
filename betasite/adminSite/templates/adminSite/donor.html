@@ -1,0 +1,114 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: {{ donor.fname }} {{ donor.lname }} {% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+	<div class="ui five column grid">
+			<div class="row"></div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="ui medium bordered image column">
+					<img src="{% static 'adminSite/img/dp.jpg' %}">
+				</div>
+				<div class="column">
+					<h1>{{ donor.fname }} {{ donor.mname }}  {{ donor.lname }}</h1>
+					<div class="ui list">
+						<div class="item"><h5>Class: <a href="{% url 'adminSite:class' donor.class_field %}">{{ donor.class_field }}</a></h5></div>
+						<div class="item"><h5>Address: Cebu City</h5></div>
+						<div class="item"><h5>Contact Number: {{ donor.contactno }}</h5></div>
+						<div class="item"><h5>Email: {{ donor.email }}</h5></div>
+						<div class="item"><h5>Credit Card No. : {{ donor.creditno }}</h5></div>
+					</div>
+				</div>
+				<div class="column"></div>
+				<div class="column">
+					<button class="ui basic icon button" id="edit">
+						<i class="edit icon"></i>
+						Edit Profile
+					</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="twelve wide column">
+					<h3>Donations</h3>
+					<table class="ui single line table">
+					  <thead>
+					    <tr>
+					      <th>Donation ID</th>
+					      <th>Amount Pledged</th>
+					      <th>Date of Last Payment</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  	{% for donation in donor.donations.all %}
+					    <tr>
+					      <td><a href="{% url 'adminSite:donation' donation.donationno %}">{{ donation.donationno }}</a></td>
+					      <td>{{ donation.amount }}PHP</td>
+					      <td>{{ donation.transactions.last.date_paid }}</td>
+					    </tr>
+					    {% endfor %}
+					  </tbody>
+					  <tfoot>
+					    <tr>
+					    	<th colspan="10">
+						      <div class="ui right floated pagination menu">
+						        <a class="icon item">
+						          <i class="left chevron icon"></i>
+						        </a>
+						        <div class="item">1 of 1</div>
+						        <a class="icon item">
+						          <i class="right chevron icon"></i>
+						        </a>
+						      </div>
+						    </th>
+					  	</tr>
+					  </tfoot>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="twelve wide column">
+					<h3>Events Joined</h3>
+					<table class="ui single line table">
+					  <thead>
+					    <tr>
+					      <th>Event ID</th>
+					      <th>Event Name</th>
+					      <th>Event Date</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  {% for event in donor.events.objects %}
+					    <tr>
+					      <td><a href="#">{{ event.eventid }}</a></td>
+					      <td>{{ event.eventname }}</td>
+					      <td>{{ event.eventdate }}</td>
+					    </tr>
+					  {% endfor %}
+					  </tbody>
+					   <tfoot>
+					    <tr>
+					    	<th colspan="10">
+						      <div class="ui right floated pagination menu">
+						        <a class="icon item">
+						          <i class="left chevron icon"></i>
+						        </a>
+						        <div class="item">1 of 1</div>
+						        <a class="icon item">
+						          <i class="right chevron icon"></i>
+						        </a>
+						      </div>
+						    </th>
+					  	</tr>
+					  </tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

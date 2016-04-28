@@ -1,41 +1,52 @@
 {% extends 'adminSite/base.html' %}
 {% load staticfiles %}
-{% block title %}Beta University Admin: Home{% endblock %}
+{% block title %}Beta University Admin: Donation{% endblock %}
 
 {% block style %}{% endblock %}
 
 {% block content %}
-		<div class="ui five column grid">
+	<div class="ui grid">
 			<div class="row"></div>
 			<div class="row">
-				<div class="column"></div>
-				<div class="column">
-					<h2>Classes</h2>
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<h1>Donation</h1>
+					<h4>Pledge Amount: {{ donation.amount }}</h4>
 				</div>
 			</div>
 			<div class="row">
-				<div class="column"></div>
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<h2>Payments</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="three wide column"></div>
 				<div class="twelve wide column">
 					<table class="ui single line table">
 					  <thead>
 					    <tr>
-					      <th>Class Year</th>
-					      <th>Class Coordinator</th>
+					      <th>Payment ID</th>
+					      <th>Amount</th>
+					      <th>Date</th>
+					      <th>Time</th>
 					    </tr>
 					  </thead>
 					  <tbody>
-					  	{% for class in object_list %}
 					    <tr>
-					      <td><a href="{% url 'adminSite:class' class.classyear%}">{{ class.classyear }}</a></td>
-					      <td>{{ class.coordinator }}</td>
-					    </tr>
+					    {% for transaction in donation.transactions.all %}
+					      <td><a href="#">{{ transaction.transactionid }}</a></td>
+					      <td>{{ transaction.amount_paid }}PHP</td>
+					      <td>{{ transaction.date_paid }}</td>
+					      <td>{{ transaction.time_paid }}</td>
 					    {% endfor %}
+					    </tr>
 					  </tbody>
 					   <tfoot>
 					    <tr>
 					    	<th colspan="10">
-					    		<div class="ui left floated small primary labeled icon button" id="addClass">
-						        	<i class="users icon"></i> Add Class
+					    		<div class="ui left floated small primary labeled icon button" id="makePayment">
+						        	<i class="dollar icon"></i>Add Payment
 						        </div>
 						      	<div class="ui right floated pagination menu">
 						        	<a class="icon item">
@@ -53,25 +64,25 @@
 				</div>
 			</div>
 		</div>
-		<div class="ui modal">
+	<div class="ui modal">
 		<div class="header">
-			Add New Class
+			Make Payment
 		</div>
 		<div class="content">
-			<form class="ui form" id="newParticipant" action="#" method="POST">
+			<form class="ui form" id="makePayment" action="#" method="POST">
 				<div class="field">
-					<label>Class Year</label>
+					<label>Amount</label>
 				</div>
-				<div>
-					<input type="text" id="class_year">
+				<div class="field">
+					<input type="text" id="payment" placeholder="Amount of Payment">
 				</div>
 			</form>
 		</div>
 		<div class="actions">
 		    <div class="two fluid ui buttons">
 		      	<div class="ui ok green button" type="submit" form="newParticipant">
-		        	<i class="user icon"></i>
-		        	Add Class
+		        	<i class="dollar icon"></i>
+		        	Make Payment
 		    	</div>
 		    	<div class="ui ok red button">
 		        	<i class="remove icon"></i>
@@ -83,9 +94,10 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript">
-		$('#addClass').click(function(){
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+		$('#makePayment').click(function(){
 			$('.ui.modal').modal('show')
 		});
-</script>
+	</script>
 {% endblock %}

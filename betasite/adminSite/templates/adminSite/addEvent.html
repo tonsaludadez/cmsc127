@@ -24,6 +24,12 @@
 						<div class="four wide field">
 							<input type="text" placeholder="Event Name">
 						</div>
+						<div class="field">
+							<label>Date</label>
+						</div>
+						<div class="four wide field">
+							<input type="text" placeholder="31-12-9999">
+						</div>
 						<div class="ui button" tabindex="0">Add Event</div>
 					</form>
 				</div>
@@ -31,4 +37,8 @@
 		</div>
 {% endblock %}
 
-{% block scripts %}{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	$('.ui.dropdown').dropdown()
+</script>
+{% endblock %}

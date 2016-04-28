@@ -29,8 +29,8 @@
 				  <tbody>
 				    <tr>
 				    {% for donation in object_list %}
-					    <td><a href="#">{{ donation.donationno }}</a></td>
-					    <td><a href="#">{{ donation.donorid }}</a></td>
+					    <td><a href="{% url 'adminSite:donation' donation.donationno %}">{{ donation.donationno }}</a></td>
+					    <td><a href="{% url 'adminSite:donor' donation.donorid.donorid %}">{{ donation.donorid }}</a></td>
 					    <td>{{ donation.amount }}PHP</td>
 					    <td>{{ donation.transactions.last.amount_paid }}PHP</td>
 					    <td>{{ donation.transactions.all.last.date_paid }}</td>
@@ -64,7 +64,7 @@
 {% block scripts %}
 	<script type="text/javascript">
 		$('#addDonation').click(function() {
-			location.href = "{% url 'addDonation' %}"
+			location.href = "{% url 'adminSite:addDonation' %}"
 		})
 	</script>
 {% endblock %}

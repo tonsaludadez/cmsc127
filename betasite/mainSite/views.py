@@ -20,7 +20,7 @@ class HomePage(TemplateView):
 		return context
 
 	def post(self, request, *args, **kwargs):
-
+		
 		context = self.get_context_data(*args, **kwargs)
 		form = context['loginForm']
 		if form.is_valid():

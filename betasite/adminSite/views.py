@@ -113,3 +113,9 @@ def AddDonorForm(request):
 	newDonor = Donor(fname=fname, mname=mname, lname=lname, contactno=contactno, creditno=creditno, email=email, class_field=class_field)
 	newDonor.save()
 	return redirect('adminSite:donorList')
+
+def AddClassForm(request):
+	classyear = request.POST['classyear']
+	newClass = Class(classyear=classyear)
+	newClass.save()
+	return redirect('adminSite:classesList')

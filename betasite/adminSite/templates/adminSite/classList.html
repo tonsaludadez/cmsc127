@@ -58,18 +58,19 @@
 			Add New Class
 		</div>
 		<div class="content">
-			<form class="ui form" id="newParticipant" action="#" method="POST">
+			<form class="ui form" id="newParticipant" action="{% url 'adminSite:newClass' %}" method="POST">
+				{% csrf_token %}
 				<div class="field">
 					<label>Class Year</label>
 				</div>
 				<div>
-					<input type="text" id="class_year">
+					<input type="text" name="classyear">
 				</div>
 			</form>
 		</div>
 		<div class="actions">
 		    <div class="two fluid ui buttons">
-		      	<div class="ui ok green button" type="submit" form="newParticipant">
+		      	<div class="ui ok green button" id="addNewClass">
 		        	<i class="user icon"></i>
 		        	Add Class
 		    	</div>
@@ -84,8 +85,11 @@
 
 {% block scripts %}
 <script type="text/javascript">
-		$('#addClass').click(function(){
-			$('.ui.modal').modal('show')
-		});
+	$('#addClass').click(function() {
+		$('.ui.modal').modal('show')
+	});
+	$('#addNewClass').click(function() {
+		$('#newParticipant').submit();
+	});
 </script>
 {% endblock %}

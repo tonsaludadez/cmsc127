@@ -22,6 +22,7 @@
 					      <th>Donor ID</th>
 					      <th>Donor Name</th>
 					      <th>Date Last Payed</th>
+					      <th></th>
 					    </tr>
 					  </thead>
 					  <tbody>
@@ -30,6 +31,9 @@
 						      <td><a href="{% url 'adminSite:donor' donor.donorid %}">{{ donor.donorid }}</a></td>
 						      <td>{{ donor.fname }} {{donor.lname}} </td>
 						      <td>{{ donor.transactions.last.date_paid }}</td>
+						      <td>
+								<a href="#"><i class="trash icon"></i></a>
+						      </td>
 						    </tr>
 					    {% endfor %}
 					  </tbody>

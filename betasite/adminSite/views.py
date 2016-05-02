@@ -115,6 +115,12 @@ def AddDonorForm(request):
 	newDonor.save()
 	return redirect('adminSite:donorList')
 
+def DeleteDonor(request, donorid):
+	toDelete = Donor.objects.get(donorid=donorid)
+	toDelete.delete()
+	return redirect('adminSite:donorList')
+
+
 def AddClassForm(request):
 	classyear = request.POST['classyear']
 	newClass = Class(classyear=classyear)

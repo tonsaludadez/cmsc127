@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^donors/(?P<pk>[0-9]+)/$',views.DonorView.as_view(), name='donor'),
     url(r'^donations/(?P<pk>[0-9]+)/$',views.DonationView.as_view(), name='donation'),
     url(r'^class/(?P<pk>[0-9]+)/$',views.ClassView.as_view(), name='class'),
+    url(r'^class/modify/$',views.ModifyCoordinator, name='modifyCoor'),
 ]

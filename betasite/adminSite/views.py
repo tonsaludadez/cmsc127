@@ -121,3 +121,10 @@ def AddClassForm(request):
 	newClass.save()
 	return redirect('adminSite:classesList')
 
+def ModifyCoordinator(request):
+	newCoor = Donor.objects.get(donorid=request.POST['donor'])
+	class_year = Class.objects.get(classyear=request.POST['class_year'])
+	print class_year
+	class_year.coordinator = newCoor
+	class_year.save();
+	return redirect('adminSite:classesList')

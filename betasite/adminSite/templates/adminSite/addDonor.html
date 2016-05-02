@@ -54,6 +54,21 @@
 								</div>
 							</div>
 						</div>
+						<div class="field">
+							<label>Donor Affiliation</label>
+						</div>
+						<div class="field">
+							<div class="ui fluid search selection dropdown">
+								<input type="hidden" name="donor">
+								<i class="dropdown icon"></i>
+								<div class="default text">Select Donor Affiliation</div>
+								<div class="menu">
+								{% for donor in donors %}
+									<div class="item" data-value="{{ donor.donorid }}">{{ donor.lname }}, {{ donor.fname }}</div>
+								{% endfor %}
+								</div>
+							</div>
+						</div>
 						<h4 class="ui dividing header">Contact Info</h4>
 						<div class="two fields">
 							<div class="field">

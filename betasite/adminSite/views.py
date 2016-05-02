@@ -51,6 +51,7 @@ class AddDonorView(LoginRequiredMixin, TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(AddDonorView, self).get_context_data(**kwargs)
 		context['classes'] = Class.objects.all()
+		context['donors'] = Donor.objects.all()
 
 		return context
 
@@ -119,3 +120,4 @@ def AddClassForm(request):
 	newClass = Class(classyear=classyear)
 	newClass.save()
 	return redirect('adminSite:classesList')
+

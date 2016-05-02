@@ -48,6 +48,12 @@ class AboutUs(TemplateView):
 
 		return context
 
+	def get(self, request, *args, **kwargs):
+		if request.user.is_authenticated():
+			return redirect('adminSite:adminHome')
+		else:
+			return super(AboutUs, self).get(request, *args, **kwargs)
+
 	def post(self, request, *args, **kwargs):
 
 		context = self.get_context_data(*args, **kwargs)

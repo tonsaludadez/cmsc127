@@ -68,7 +68,9 @@
 			Change Coordinator
 		</div>
 		<div class="content">
-			<form class="ui form" id="changeForm" action="#" method="POST">
+			<form class="ui form" id="changeForm" action="{% url 'adminSite:modifyCoor' %}" method="POST">
+				{% csrf_token %}
+				<input type="hidden" name="class_year" value="{{ class }}">
 				<div class="field">
 					<label>Change Coordinator</label>
 					<div class="ui fluid search selection dropdown">

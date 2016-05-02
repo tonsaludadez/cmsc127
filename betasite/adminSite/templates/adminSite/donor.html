@@ -15,7 +15,13 @@
 				<div class="column">
 					<h1>{{ donor.fname }} {{ donor.mname }}  {{ donor.lname }}</h1>
 					<div class="ui list">
-						<div class="item"><h5>Class: <a href="{% url 'adminSite:class' donor.class_field %}">{{ donor.class_field }}</a></h5></div>
+						<div class="item">
+						<h5>Class: <a href="
+									{% if donor.class_field %}
+										{% url 'adminSite:class' donor.class_field %}
+									{% endif %}">{{ donor.class_field }}
+						</a></h5>
+						</div>
 						<div class="item"><h5>Address: Cebu City</h5></div>
 						<div class="item"><h5>Contact Number: {{ donor.contactno }}</h5></div>
 						<div class="item"><h5>Email: {{ donor.email }}</h5></div>

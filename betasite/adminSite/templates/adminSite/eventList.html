@@ -22,6 +22,7 @@
 				      <th>Event ID</th>
 				      <th>Event Name</th>
 				      <th>Event Date</th>
+				      <th>Delete</th>
 				    </tr>
 				  </thead>
 				  <tbody>
@@ -30,6 +31,9 @@
 					      <td><a href="#">{{ event.eventid }}</a></td>
 					      <td>{{ event.event_name }}</td>
 					      <td>{{ event.event_date }}</td>
+					      <td>
+								<a href="#"><i class="trash icon"></i></a>
+						  </td>
 					    </tr>
 					{% endfor %}
 				  </tbody>

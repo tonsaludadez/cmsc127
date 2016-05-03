@@ -24,6 +24,7 @@
 				      <th>Pledge Amount</th>
 				      <th>Amount Payed</th>
 				      <th>Date Last Payed</th>
+				      <th>Delete</th>
 				    </tr>
 				  </thead>
 				  <tbody>
@@ -34,6 +35,9 @@
 					    <td>{{ donation.amount }}PHP</td>
 					    <td>{{ donation.transactions.last.amount_paid }}PHP</td>
 					    <td>{{ donation.transactions.all.last.date_paid }}</td>
+					    <td>
+								<a href="#"><i class="trash icon"></i></a>
+						</td>
 				    {% endfor %}
 				    </tr>
 				  </tbody>

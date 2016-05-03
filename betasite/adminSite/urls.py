@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^donations/$', views.DonationListView.as_view(), name='donationList'),
     url(r'^classes/$', views.ClassesListView.as_view(), name='classesList'),
     url(r'^donors/addDonor/$',views.AddDonorView.as_view(), name='addDonor'),
+    url(r'^donors/editDonor/$',views.EditDonorView.as_view(), name='editDonor'),
     url(r'^event/addEvent/$',views.AddEventView.as_view(), name='addEvent'),
     url(r'^donation/addDonation/$',views.AddDonationView.as_view(), name='addDonation'),
     url(r'^donor/submit/$',views.AddDonorForm, name='newDonor'),

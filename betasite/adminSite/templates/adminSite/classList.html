@@ -21,6 +21,7 @@
 					    <tr>
 					      <th>Class Year</th>
 					      <th>Class Coordinator</th>
+					      <th>Delete</th>
 					    </tr>
 					  </thead>
 					  <tbody>
@@ -28,6 +29,9 @@
 					    <tr>
 					      <td><a href="{% url 'adminSite:class' class.classyear%}">{{ class.classyear }}</a></td>
 					      <td>{{ class.coordinator }}</td>
+					      <td>
+								<a href="#"><i class="trash icon"></i></a>
+						  </td>
 					    </tr>
 					    {% endfor %}
 					  </tbody>

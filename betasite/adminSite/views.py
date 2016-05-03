@@ -55,6 +55,18 @@ class AddDonorView(LoginRequiredMixin, TemplateView):
 
 		return context
 
+class EditDonorView(LoginRequiredMixin, TemplateView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:editDonor'
+	template_name = 'adminSite/editDonor.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(EditDonorView, self).get_context_data(**kwargs)
+		context['classes'] = Class.objects.all()
+		context['donors'] = Donor.objects.all()
+
+		return context
+
 class AddEventView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:addEvent'

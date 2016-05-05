@@ -115,11 +115,9 @@ class ClassView(LoginRequiredMixin, DetailView):
 	context_object_name = 'class'
 	template_name = 'adminSite/class.html'
 
-class MonthlyReport(LoginRequiredMixin, ListView):
+class MonthlyReport(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:monthlyReport'
-	model = Donation
-	context_object_name = 'donation'
 	template_name = 'adminSite/monthlyReport.html'
 
 class EventView(LoginRequiredMixin, DetailView):

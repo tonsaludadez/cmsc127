@@ -24,13 +24,13 @@
 						</div>
 						<div class="three fields">
 							<div class="field">
-								<input type="text" placeholder="First Name" name="fname">
+								<input type="text" placeholder="First Name" name="fname" value="{{ donor.fname }}">
 							</div>
 							<div class="field">
-								<input type="text" placeholder="Middle Name" name="mname">
+								<input type="text" placeholder="Middle Name" name="mname" value="{{ donor.mname }}">
 							</div>
 							<div class="field">
-								<input type="text" placeholder="Last Name" name="lname">
+								<input type="text" placeholder="Last Name" name="lname" value="{{ donor.lname }}">
 							</div>
 						</div>
 						<div class="field">
@@ -44,7 +44,7 @@
 						</div>
 						<div class="field">
 							<div class="ui fluid search selection dropdown">
-								<input type="hidden" name="class_field">
+								<input type="hidden" name="class_field" value="{{ donor.class_field.classyear }}">
 								<i class="dropdown icon"></i>
 								<div class="default text">Select Class Year</div>
 								<div class="menu">
@@ -59,7 +59,7 @@
 						</div>
 						<div class="field">
 							<div class="ui fluid search selection dropdown">
-								<input type="hidden" name="donor">
+								<input type="hidden" name="donor" value="{{ donor.donor_affiliation.donorid }}">
 								<i class="dropdown icon"></i>
 								<div class="default text">Select Donor Affiliation</div>
 								<div class="menu">
@@ -73,11 +73,11 @@
 						<div class="two fields">
 							<div class="field">
 								<label>Contact Number</label>
-								<input type="text" placeholder="Telephone or Cellphone Number" name="contactno">
+								<input type="text" placeholder="Telephone or Cellphone Number" name="contactno" value="{{ donor.contactno }}">
 							</div>
 							<div class="field">
 								<label>Email address</label>
-								<input type="text" placeholder="example123@yahoo.com" name="email">
+								<input type="text" placeholder="example123@yahoo.com" name="email" value="{{ donor.email }}">
 							</div>
 						</div>
 						<h4 class="ui dividing header">Payment Info</h4>
@@ -85,9 +85,10 @@
 							<label>Credit Card Number</label>
 						</div>
 						<div class="field">
-							<input type="text" placeholder="Credit Card Number" name="creditno">
+							<input type="text" placeholder="Credit Card Number" name="creditno" value="{{ donor.creditno }}">
 						</div>
-						<div class="ui button primary" tabindex="0" id="addButton">Add Donor</div>
+						<div class="ui button primary" tabindex="0" id="addButton">Save Changes</div>
+						<div class="ui button primary" id="cancel">Cancel</div>
 					</form>
 				</div>
 			</div>
@@ -100,6 +101,9 @@
 		$('.ui.dropdown').dropdown();
 		$('#addButton').click(function() {
 			$('#donorForm').submit();
+		});
+		$('#cancel').click(function() {
+			location.href = "{% url 'adminSite:donor' donor.donorid %}";
 		});
 	</script>
 {% endblock %}

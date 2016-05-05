@@ -62,6 +62,15 @@ class EditDonorView(LoginRequiredMixin, TemplateView):
 	redirect_field_name = 'adminSite:editDonor'
 	template_name = 'adminSite/editDonor.html'
 
+	def get_context_data(self, **kwargs):
+		context = super(EditDonorView, self).get_context_data(**kwargs)
+		donorid = self.kwargs['donorid']
+		context['donor'] = Donor.objects.get(donorid=donorid)
+		context['classes'] = Class.objects.all()
+		context['donors'] = Donor.objects.all()
+
+		return context
+
 class AddEventView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:addEvent'
@@ -88,11 +97,7 @@ class DonorView(LoginRequiredMixin, DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super(DonorView, self).get_context_data(**kwargs)
-		for donation in self.object.donations.all():
-			print donation.transactions.all().aggregate(Sum('amount_paid'))
-			context[str(donation.donorid) + '2'] = donation.transactions.all().aggregate(Sum('amount_paid'))
-
-			print context
+		context['eventDonations'] = EventDonation.objects.filter(donorid=self.object.donorid)
 		
 		return context
 
@@ -150,8 +155,9 @@ def AddDonorForm(request):
 
 def AddDonationForm(request):
 	amount = request.POST['amount']
+	pledge_date = request.POST['pledge_date']
 	donorid = Donor.objects.get(donorid=request.POST['donorid'])
-	newDonation = Donation(donorid=donorid, amount=amount)
+	newDonation = Donation(donorid=donorid, amount=amount,pledge_date=pledge_date)
 	newDonation.save()
 	if request.POST['eventid']:
 		eventid = Events.objects.get(eventid=request.POST['eventid'])

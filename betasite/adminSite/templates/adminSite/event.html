@@ -1,0 +1,111 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Home{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+	<div class="ui grid">
+			<div class="row"></div>
+			<div class="row">
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<h1>{{ event.event_name }}</h1>
+					<h4>Date: {{ event.event_date }}</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<br>
+					<h2>Participants</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<table class="ui single line table">
+					  <thead>
+					    <tr>
+					      <th>Donor ID</th>
+					      <th>Name</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  {% for eventdonation in eventDonations %}
+					    <tr>
+					      <td><a href="#">{{ eventdonation.donorid.donorid }}</a></td>
+					      <td>{{ eventdonation.donorid.lname }}, {{ eventdonation.donorid.fname }}</td>
+					    </tr>
+					  {% endfor %}
+					  </tbody>
+					   <tfoot>
+					    <tr>
+					    	<th colspan="10">
+					    		<div class="ui left floated small primary labeled icon button" id="addParticipant">
+						        	<i class="user icon"></i>Add Participant
+						        </div>
+						      	<div class="ui right floated pagination menu">
+						        	<a class="icon item">
+						          		<i class="left chevron icon"></i>
+							       	</a>
+							    	<div class="item">1 of 1</div>
+						        	<a class="icon item">
+						         		<i class="right chevron icon"></i>
+						        	</a>
+						      	</div>
+						    </th>
+					  	</tr>
+					  </tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ui modal">
+		<div class="header">
+			Add Participant
+		</div>
+		<div class="content">
+			<form class="ui form" id="newParticipant" action="#" method="POST">
+				<div class="field">
+					<label>Participant Name</label>
+					<div class="ui fluid search selection dropdown">
+						<input type="hidden" name="donor">
+						<i class="dropdown icon"></i>
+						<div class="default text">Select Donor</div>
+						<div class="menu">
+							<div class="item" data-value="10100210">Quezon, Ice</div>
+							<div class="item" data-value="10100210">Quezon, Ice</div>
+							<div class="item" data-value="10100210">Quezon, Ice</div>
+							<div class="item" data-value="10100210">Quezon, Ice</div>
+							<div class="item" data-value="10100210">Quezon, Ice</div>
+							<div class="item" data-value="10100210">Quezon, Ice</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="actions">
+		    <div class="two fluid ui buttons">
+		      	<div class="ui ok green button" type="submit" form="newParticipant">
+		        	<i class="user icon"></i>
+		        	Add Participant
+		    	</div>
+		    	<div class="ui ok red button">
+		        	<i class="remove icon"></i>
+		    		Cancel
+		    	</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+		$('#addParticipant').click(function(){
+			$('.ui.modal').modal('show')
+		});
+	</script>
+{% endblock %}

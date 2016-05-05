@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.views.generic import  CreateView, DetailView, ListView, RedirectView, TemplateView
 
-from adminSite.models import Class, Donation, Donor, Events
+from adminSite.models import Class, Donation, Donor, Events, EventDonation
 
 import datetime
 
@@ -110,6 +110,19 @@ class ClassView(LoginRequiredMixin, DetailView):
 	context_object_name = 'class'
 	template_name = 'adminSite/class.html'
 
+class EventView(LoginRequiredMixin, DetailView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:EventList'
+	model = Events
+	context_object_name = 'event'
+	template_name = 'adminSite/event.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(EventView, self).get_context_data(**kwargs)
+		context['eventDonations'] = EventDonation.objects.filter(eventid=context['event'].eventid)
+		print EventDonation.objects.all()
+		return context
+
 def AddClassForm(request):
 	classyear = request.POST['classyear']
 	newClass = Class(classyear=classyear)
@@ -159,6 +172,10 @@ def DeleteClass(request, classyear):
 
 def DeleteDonation(request, donationno):
 	toDelete = Donation.objects.get(donationno=donationno)
+	if EventDonation.objects.get(donationno=toDelete):
+		deleteToo = EventDonation.objects.get(donationno=toDelete)
+		deleteToo = EventDonation.objects.get(id=deleteToo.id)
+		deleteToo.delete()
 	toDelete.delete()
 	return redirect('adminSite:donationList')
 

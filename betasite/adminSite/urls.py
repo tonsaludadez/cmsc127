@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^donation/submit/$',views.AddDonationForm, name='newDonation'),
     url(r'^class/submit/$',views.AddClassForm, name='newClass'),
     url(r'^event/submit/$',views.AddEventForm, name='newEvent'),
+    url(r'^donation/payment/submit/$',views.AddTransaction, name='newTransaction'), 
     url(r'^donors/(?P<pk>[0-9]+)/$',views.DonorView.as_view(), name='donor'),
     url(r'^events/(?P<pk>[0-9]+)/$',views.EventView.as_view(), name='event'),
     url(r'^donors/delete/(?P<donorid>[0-9]+)/$',views.DeleteDonor, name='deleteDonor'),

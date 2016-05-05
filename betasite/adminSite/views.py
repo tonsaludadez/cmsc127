@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.views.generic import  CreateView, DetailView, ListView, RedirectView, TemplateView
 
-from adminSite.models import Class, Donation, Donor, Events, EventDonation
+from adminSite.models import Class, Donation, Donor, Events, EventDonation, Transaction
 
 import datetime
 
@@ -172,6 +172,16 @@ def AddEventForm(request):
 	newEvent = Events(event_name=event_name, event_date=event_date)
 	newEvent.save()
 	return redirect('adminSite:eventList')
+
+def AddTransaction(request):
+	donationno = Donation.objects.get(donationno=request.POST['donationno'])
+	donorid = Donor.objects.get(donorid=request.POST['donorid'])
+	amount_paid = request.POST['payment']
+	date_paid = request.POST['date']
+	newTransaction = Transaction(donationno=donationno, donorid=donorid, amount_paid=amount_paid, date_paid=date_paid)
+	newTransaction.save()
+
+	return redirect('adminSite:donationList')
 
 def DeleteDonor(request, donorid):
 	toDelete = Donor.objects.get(donorid=donorid)

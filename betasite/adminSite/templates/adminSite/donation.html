@@ -34,14 +34,14 @@
 					    </tr>
 					  </thead>
 					  <tbody>
-					    <tr>
 					    {% for transaction in donation.transactions.all %}
+					    <tr>
 					      <td><a href="#">{{ transaction.transactionid }}</a></td>
-					      <td>{{ transaction.amount_paid }}PHP</td>
+					      <td>{{ transaction.amount_paid }} PHP</td>
 					      <td>{{ transaction.date_paid }}</td>
 					      <td>{{ transaction.time_paid }}</td>
+					      </tr>
 					    {% endfor %}
-					    </tr>
 					  </tbody>
 					   <tfoot>
 					    <tr>
@@ -70,18 +70,27 @@
 			Make Payment
 		</div>
 		<div class="content">
-			<form class="ui form" id="makePayment" action="#" method="POST">
+			<form class="ui form" id="makePaymentForm" action="{% url 'adminSite:newTransaction' %}" method="POST">
+				{% csrf_token %}
+				<input type="hidden" value="{{ donation.donationno }}" name="donationno">
+				<input type="hidden" value="{{ donation.donorid.donorid }}" name="donorid">
 				<div class="field">
 					<label>Amount</label>
 				</div>
 				<div class="field">
-					<input type="text" id="payment" placeholder="Amount of Payment">
+					<input type="text" name="payment" placeholder="Amount of Payment">
+				</div>
+				<div class="field">
+					<label>Amount Payed</label>
+				</div>
+				<div class="field">
+					<input type="text" name="date" placeholder="YYYY-MM-DD">
 				</div>
 			</form>
 		</div>
 		<div class="actions">
 		    <div class="two fluid ui buttons">
-		      	<div class="ui ok green button" type="submit" form="newParticipant">
+		      	<div class="ui ok green button" id="submitPayment">
 		        	<i class="dollar icon"></i>
 		        	Make Payment
 		    	</div>
@@ -99,6 +108,9 @@
 		$('.ui.dropdown').dropdown();
 		$('#makePayment').click(function(){
 			$('.ui.modal').modal('show')
+		});
+		$('#submitPayment').click(function() {
+			$('#makePaymentForm').submit();
 		});
 	</script>
 {% endblock %}

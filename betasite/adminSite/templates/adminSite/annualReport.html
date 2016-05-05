@@ -1,0 +1,45 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Monthly Report{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+		<div class="ui five column grid">
+			<div class="row"></div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="column">
+					<h2>Donors</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="twelve wide column">
+					<table class="ui single line table">
+					  <thead>
+					    <tr>
+					      <th>Donor ID</th>
+					      <th>Donor Name</th>
+					      <th>Date Last Payed</th>
+					      <th>Delete</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  	{% for donor in object_list %}
+						    <tr>
+						      <td><a href="{% url 'adminSite:donor' donor.donorid %}">{{ donor.donorid }}</a></td>
+						      <td>{{ donor.fname }} {{ donor.lname }} </td>
+						      <td>{{ donor.transactions.last.date_paid }}</td>
+						      <td>
+								<a href="{% url 'adminSite:deleteDonor' donor.donorid %}"><i class="trash icon"></i></a>
+						      </td>
+						    </tr>
+					    {% endfor %}
+					  </tbody>
+					   <tfoot></tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+{% endblock %}

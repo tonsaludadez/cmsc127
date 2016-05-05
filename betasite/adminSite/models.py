@@ -61,7 +61,7 @@ class EventDonation(models.Model):
         unique_together = (('eventid', 'donorid', 'donationno'),)
 
     def __str__(self):
-    	return self.eventid
+    	return str(self.eventid)
 
 
 class Events(models.Model):

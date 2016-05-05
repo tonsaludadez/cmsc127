@@ -28,7 +28,7 @@
 				  <tbody>
 				  	{% for event in object_list %}
 					    <tr>
-					      <td><a href="#">{{ event.eventid }}</a></td>
+					      <td><a href="{% url 'adminSite:event' event.eventid %}">{{ event.eventid }}</a></td>
 					      <td>{{ event.event_name }}</td>
 					      <td>{{ event.event_date }}</td>
 					      <td>

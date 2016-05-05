@@ -6,6 +6,8 @@ from django.views.generic import  CreateView, DetailView, ListView, RedirectView
 
 from adminSite.models import Class, Donation, Donor, Events
 
+import datetime
+
 class LogoutView(RedirectView):
     url = '/'
 
@@ -60,13 +62,6 @@ class EditDonorView(LoginRequiredMixin, TemplateView):
 	redirect_field_name = 'adminSite:editDonor'
 	template_name = 'adminSite/editDonor.html'
 
-	def get_context_data(self, **kwargs):
-		context = super(EditDonorView, self).get_context_data(**kwargs)
-		context['classes'] = Class.objects.all()
-		context['donors'] = Donor.objects.all()
-
-		return context
-
 class AddEventView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:addEvent'
@@ -115,6 +110,12 @@ class ClassView(LoginRequiredMixin, DetailView):
 	context_object_name = 'class'
 	template_name = 'adminSite/class.html'
 
+def AddClassForm(request):
+	classyear = request.POST['classyear']
+	newClass = Class(classyear=classyear)
+	newClass.save()
+	return redirect('adminSite:classesList')
+
 def AddDonorForm(request):
 	fname = request.POST['fname']
 	mname = request.POST['mname']
@@ -127,17 +128,39 @@ def AddDonorForm(request):
 	newDonor.save()
 	return redirect('adminSite:donorList')
 
+def AddDonationForm(request):
+	amount = request.POST['amount']
+	donorid = Donor.objects.get(donorid=request.POST['donorid'])
+	newDonation = Donation(donorid=donorid, amount=amount)
+	newDonation.save()
+	if request.POST['eventid']:
+		eventid = Events.objects.get(eventid=request.POST['eventid'])
+		newEventDonation = EventDonation(donorid=donorid, donationno=newDonation, eventid=eventid)
+		newEventDonation.save()
+
+	return redirect('adminSite:donationList')
+
+def AddEventForm(request):
+	event_name = request.POST['event_name']
+	event_date = request.POST['event_date']
+	newEvent = Events(event_name=event_name, event_date=event_date)
+	newEvent.save()
+	return redirect('adminSite:eventList')
+
 def DeleteDonor(request, donorid):
 	toDelete = Donor.objects.get(donorid=donorid)
 	toDelete.delete()
 	return redirect('adminSite:donorList')
 
-
-def AddClassForm(request):
-	classyear = request.POST['classyear']
-	newClass = Class(classyear=classyear)
-	newClass.save()
+def DeleteClass(request, classyear):
+	toDelete = Class.objects.get(classyear=classyear)
+	toDelete.delete()
 	return redirect('adminSite:classesList')
+
+def DeleteDonation(request, donationno):
+	toDelete = Donation.objects.get(donationno=donationno)
+	toDelete.delete()
+	return redirect('adminSite:donationList')
 
 def ModifyCoordinator(request):
 	newCoor = Donor.objects.get(donorid=request.POST['donor'])

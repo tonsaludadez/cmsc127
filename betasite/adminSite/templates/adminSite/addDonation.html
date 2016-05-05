@@ -16,18 +16,19 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="twelve wide column">
-					<form class="ui form">
+					<form class="ui form" method="post" action="{% url 'adminSite:newDonation' %}" id="addDonationForm">
+						{% csrf_token %}
 						<h4 class="ui dividing header">Donation Info</h4>
 						<div class="four wide field">
 							<div class="field">
 								<label>Donor Name</label>
 								<div class="ui fluid search selection dropdown">
-									<input type="hidden" name="donor">
+									<input type="hidden" name="donorid">
 									<i class="dropdown icon"></i>
 									<div class="default text">Select Donor</div>
 									<div class="menu">
 									{% for donor in donors %}
-										<div class="item" data-value="10100210">{{ donor.lname }}, {{ donor.fname }} </div>
+										<div class="item" data-value="{{ donor.donorid }}">{{ donor.lname }}, {{ donor.fname }} </div>
 									{% endfor %}
 									</div>
 								</div>
@@ -37,12 +38,12 @@
 							<div class="field">
 								<label>Event Name</label>
 								<div class="ui fluid search selection dropdown">
-									<input type="hidden" name="donor">
+									<input type="hidden" name="eventid">
 									<i class="dropdown icon"></i>
 									<div class="default text">Select Event</div>
 									<div class="menu">
 										{% for event in events %}
-											<div class="item" data-value="10100210">{{ event.event_name }}</div>
+											<div class="item" data-value="{{ event.eventid }}">{{ event.event_name }}</div>
 										{% endfor %}
 									</div>
 								</div>
@@ -52,11 +53,11 @@
 							<div class="field">
 								<label>Pledge Amount</label>
 								<div class="field">
-									<input type="text" placeholder="Amount" id="amount">
+									<input type="text" placeholder="Amount" name="amount">
 								</div>
 							</div>
 						</div>
-						<div class="ui primary button" tabindex="0">Add Donation</div>
+						<div class="ui primary button" tabindex="0" id="addDonation">Add Donation</div>
 					</form>
 				</div>
 			</div>
@@ -66,5 +67,8 @@
 {% block scripts %}
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
+		$('#addDonation').click(function() {
+			$('#addDonationForm').submit();
+		});
 	</script>
 {% endblock %}

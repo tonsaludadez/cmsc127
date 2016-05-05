@@ -28,18 +28,18 @@
 				    </tr>
 				  </thead>
 				  <tbody>
-				    <tr>
 				    {% for donation in object_list %}
+				    <tr>
 					    <td><a href="{% url 'adminSite:donation' donation.donationno %}">{{ donation.donationno }}</a></td>
 					    <td><a href="{% url 'adminSite:donor' donation.donorid.donorid %}">{{ donation.donorid }}</a></td>
 					    <td>{{ donation.amount }}PHP</td>
 					    <td>{{ donation.transactions.last.amount_paid }}PHP</td>
 					    <td>{{ donation.transactions.all.last.date_paid }}</td>
 					    <td>
-								<a href="#"><i class="trash icon"></i></a>
+								<a href="{% url 'adminSite:deleteDonation' donation.donationno %}"><i class="trash icon"></i></a>
 						</td>
+					</tr>
 				    {% endfor %}
-				    </tr>
 				  </tbody>
 				   <tfoot>
 				    <tr>

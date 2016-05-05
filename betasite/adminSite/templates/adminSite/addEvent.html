@@ -16,21 +16,22 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="twelve wide column">
-					<form class="ui form">
+					<form class="ui form" method="post" action="{% url 'adminSite:newEvent' %}" id="addEventForm">
+						{% csrf_token %}
 						<h4 class="ui dividing header">Event Info</h4>
 						<div class="field">
 							<label>Name</label>
 						</div>
 						<div class="four wide field">
-							<input type="text" placeholder="Event Name">
+							<input type="text" placeholder="Event Name" name="event_name">
 						</div>
 						<div class="field">
 							<label>Date</label>
 						</div>
 						<div class="four wide field">
-							<input type="text" placeholder="31-12-9999">
+							<input type="text" placeholder="YYYY-MM-DD" name="event_date">
 						</div>
-						<div class="ui button" tabindex="0">Add Event</div>
+						<div class="ui button" tabindex="0" id="addEvent">Add Event</div>
 					</form>
 				</div>
 			</div>
@@ -39,6 +40,9 @@
 
 {% block scripts %}
 <script type="text/javascript">
-	$('.ui.dropdown').dropdown()
+	$('.ui.dropdown').dropdown();
+	$('#addEvent').click(function() {
+		$('#addEventForm').submit();
+	});
 </script>
 {% endblock %}

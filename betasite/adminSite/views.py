@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.views.generic import  CreateView, DetailView, ListView, RedirectView, TemplateView
 
-from adminSite.models import Class, Donation, Donor, Events, EventDonation
+from adminSite.models import Class, Donation, Donor, Events, EventDonation, Transaction
 
 import datetime
 
@@ -62,6 +62,15 @@ class EditDonorView(LoginRequiredMixin, TemplateView):
 	redirect_field_name = 'adminSite:editDonor'
 	template_name = 'adminSite/editDonor.html'
 
+	def get_context_data(self, **kwargs):
+		context = super(EditDonorView, self).get_context_data(**kwargs)
+		donorid = self.kwargs['donorid']
+		context['donor'] = Donor.objects.get(donorid=donorid)
+		context['classes'] = Class.objects.all()
+		context['donors'] = Donor.objects.all()
+
+		return context
+
 class AddEventView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:addEvent'
@@ -88,11 +97,7 @@ class DonorView(LoginRequiredMixin, DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super(DonorView, self).get_context_data(**kwargs)
-		for donation in self.object.donations.all():
-			print donation.transactions.all().aggregate(Sum('amount_paid'))
-			context[str(donation.donorid) + '2'] = donation.transactions.all().aggregate(Sum('amount_paid'))
-
-			print context
+		context['eventDonations'] = EventDonation.objects.filter(donorid=self.object.donorid)
 		
 		return context
 
@@ -148,8 +153,9 @@ def AddDonorForm(request):
 
 def AddDonationForm(request):
 	amount = request.POST['amount']
+	pledge_date = request.POST['pledge_date']
 	donorid = Donor.objects.get(donorid=request.POST['donorid'])
-	newDonation = Donation(donorid=donorid, amount=amount)
+	newDonation = Donation(donorid=donorid, amount=amount,pledge_date=pledge_date)
 	newDonation.save()
 	if request.POST['eventid']:
 		eventid = Events.objects.get(eventid=request.POST['eventid'])
@@ -164,6 +170,16 @@ def AddEventForm(request):
 	newEvent = Events(event_name=event_name, event_date=event_date)
 	newEvent.save()
 	return redirect('adminSite:eventList')
+
+def AddTransaction(request):
+	donationno = Donation.objects.get(donationno=request.POST['donationno'])
+	donorid = Donor.objects.get(donorid=request.POST['donorid'])
+	amount_paid = request.POST['payment']
+	date_paid = request.POST['date']
+	newTransaction = Transaction(donationno=donationno, donorid=donorid, amount_paid=amount_paid, date_paid=date_paid)
+	newTransaction.save()
+
+	return redirect('adminSite:donationList')
 
 def DeleteDonor(request, donorid):
 	toDelete = Donor.objects.get(donorid=donorid)

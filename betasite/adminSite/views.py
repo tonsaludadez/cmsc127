@@ -110,6 +110,22 @@ class ClassView(LoginRequiredMixin, DetailView):
 	context_object_name = 'class'
 	template_name = 'adminSite/class.html'
 
+class MonthlyReport(LoginRequiredMixin, ListView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:monthlyReport'
+	model = Donation
+	context_object_name = 'donation'
+	template_name = 'adminSite/monthlyReport.html'
+"""
+	def get_context_data(self, **kwargs):
+		context = super(MonthlyReport, self).get_context_data(**kwargs)
+		for donation in self.object.donations.all():
+			print donation.transactions.all().aggregate(Sum('amount_paid'))
+			context[str(donation.donorid) + '2'] = donation.transactions.all().aggregate(Sum('amount_paid'))
+
+			print context
+"""
+
 def AddClassForm(request):
 	classyear = request.POST['classyear']
 	newClass = Class(classyear=classyear)
@@ -169,3 +185,8 @@ def ModifyCoordinator(request):
 	class_year.coordinator = newCoor
 	class_year.save();
 	return redirect('adminSite:classesList')
+
+"""
+def MonthlyReport(request):
+	return redirect('adminSite:monthlyReport')
+"""

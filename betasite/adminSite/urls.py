@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^class/(?P<pk>[0-9]+)/$',views.ClassView.as_view(), name='class'),
     url(r'^class/delete/(?P<classyear>[0-9]+)$',views.DeleteClass, name='deleteClass'),
     url(r'^class/modify/$',views.ModifyCoordinator, name='modifyCoor'),
+    url(r'^report/monthly/$',views.MonthlyReport.as_view(), name='monthlyReport'),
 ]

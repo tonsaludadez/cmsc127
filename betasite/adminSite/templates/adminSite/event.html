@@ -24,7 +24,7 @@
 			<div class="row">
 				<div class="three wide column"></div>
 				<div class="twelve wide column">
-					<table class="ui single line table">
+					<table class="ui sortable single line table">
 					  <thead>
 					    <tr>
 					      <th>Donor ID</th>
@@ -107,5 +107,6 @@
 		$('#addParticipant').click(function(){
 			$('.ui.modal').modal('show')
 		});
+		$('.sortable.table').tablesort();
 	</script>
 {% endblock %}

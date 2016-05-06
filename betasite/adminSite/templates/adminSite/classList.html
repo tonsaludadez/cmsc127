@@ -16,7 +16,7 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="twelve wide column">
-					<table class="ui single line table">
+					<table class="ui sortable single line table">
 					  <thead>
 					    <tr>
 					      <th>Class Year</th>
@@ -95,5 +95,6 @@
 	$('#addNewClass').click(function() {
 		$('#newParticipant').submit();
 	});
+	$('.sortable.table').tablesort();
 </script>
 {% endblock %}

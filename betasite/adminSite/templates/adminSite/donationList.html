@@ -17,11 +17,11 @@
 		<div class="row">
 			<div class="column"></div>
 			<div class="twelve wide column">
-				<table class="ui single line table">
+				<table class="ui sortable celled table">
 				  <thead>
 				    <tr>
 				      <th>Donation ID</th>
-				      <th>Donor ID</th>
+				      <th class="">Donor ID</th>
 				      <th>Pledge Amount</th>
 				      <th>Amount Payed</th>
 				      <th>Balance</th>
@@ -33,7 +33,7 @@
 				    {% for donation in object_list.order_by %}
 				    <tr>
 					    <td><a href="{% url 'adminSite:donation' donation.donationno %}">{{ donation.donationno }}</a></td>
-					    <td><a href="{% url 'adminSite:donor' donation.donorid.donorid %}">{{ donation.donorid }}</a></td>
+					    <td><a href="{% url 'adminSite:donor' donation.donorid.donorid %}">{{ donation.donorid.lname }}, {{ donation.donorid.fname }} {{ donation.donorid.mname }}</a></td>
 					    <td>{{ donation.amount }} PHP</td>
 					    {% with payed=donation.transactions.all|summation %}
 					    <td>{{ payed }} PHP</td>
@@ -74,6 +74,7 @@
 	<script type="text/javascript">
 		$('#addDonation').click(function() {
 			location.href = "{% url 'adminSite:addDonation' %}"
-		})
+		});
+		$('table').tablesort();
 	</script>
 {% endblock %}

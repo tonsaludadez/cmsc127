@@ -29,7 +29,7 @@
 					  	{% for donor in object_list %}
 						    <tr>
 						      <td><a href="{% url 'adminSite:donor' donor.donorid %}">{{ donor.donorid }}</a></td>
-						      <td>{{ donor.fname }} {{ donor.lname }} </td>
+						      <td>{{ donor.lname }}, {{ donor.fname }} {{ donor.mname }}</td>
 						      <td>{{ donor.transactions.last.date_paid }}</td>
 						      <td>
 								<a href="{% url 'adminSite:deleteDonor' donor.donorid %}"><i class="trash icon"></i></a>

@@ -47,7 +47,8 @@ class Donor(models.Model):
         db_table = 'donor'
 
     def __str__(self):
-    	return self.fname + " " + self.lname
+    	return self.fname + " " + self.mname + " " + self.lname
+        #return self.lname + ", " + self.fname + " " + self.mname
 
 
 class EventDonation(models.Model):

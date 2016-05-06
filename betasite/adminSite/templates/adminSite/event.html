@@ -35,7 +35,7 @@
 					  {% for eventdonation in eventDonations %}
 					    <tr>
 					      <td><a href="#">{{ eventdonation.donorid.donorid }}</a></td>
-					      <td>{{ eventdonation.donorid.lname }}, {{ eventdonation.donorid.fname }}</td>
+					      <td>{{ eventdonation.donorid.lname }}, {{ eventdonation.donorid.fname }} {{ eventdonation.donorid.mname }}</td>
 					    </tr>
 					  {% endfor %}
 					  </tbody>

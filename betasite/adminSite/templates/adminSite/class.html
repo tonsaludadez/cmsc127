@@ -36,7 +36,7 @@
 					  	{% for donor in class.donors.all %}
 					    <tr>
 					      <td><a href="{% url 'adminSite:donor' donor.donorid %}">{{ donor.donorid }}</a></td>
-					      <td>{{ donor.fname }} {{ donor.lname }}</td>
+					      <td>{{ donor.lname }}, {{ donor.fname }} {{ donor.mname }}</td>
 					      <td>{{ donor.contactno }}</td>
 					    </tr>
 					    {% endfor %}

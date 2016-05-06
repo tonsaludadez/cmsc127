@@ -120,6 +120,11 @@ class MonthlyReport(LoginRequiredMixin, TemplateView):
 	redirect_field_name = 'adminSite:monthlyReport'
 	template_name = 'adminSite/monthlyReport.html'
 
+class AnnualReport(LoginRequiredMixin, TemplateView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:annualReport'
+	template_name = 'adminSite/annualReport.html'
+
 class EventView(LoginRequiredMixin, DetailView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:EventList'

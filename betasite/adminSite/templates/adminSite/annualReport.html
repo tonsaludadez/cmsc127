@@ -1,6 +1,6 @@
 {% extends 'adminSite/base.html' %}
 {% load staticfiles %}
-{% block title %}Beta University Admin: Monthly Report{% endblock %}
+{% block title %}Beta University Admin: Annual Report{% endblock %}
 
 {% block style %}{% endblock %}
 
@@ -10,7 +10,7 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="column">
-					<h2>Donors</h2>
+					<h2>Annual Report</h2>
 				</div>
 			</div>
 			<div class="row">
@@ -19,22 +19,12 @@
 					<table class="ui single line table">
 					  <thead>
 					    <tr>
-					      <th>Total Pledges</th>
-					      <th>Total Gifts</th>
-					      <th>Percentage</th>
+					      <th></th>
+					      <th></th>
+					      <th></th>
 					    </tr>
 					  </thead>
 					  <tbody>
-					  	{% for  in object_list %}
-						    <tr>
-						      <td></td>
-						      <td>{{ do }}</td>
-						      <td>{{ donor.transactions.last.date_paid }}</td>
-						      <td>
-								<a href="{% url 'adminSite:deleteDonor' donor.donorid %}"><i class="trash icon"></i></a>
-						      </td>
-						    </tr>
-					    {% endfor %}
 					  </tbody>
 					   <tfoot></tfoot>
 					</table>

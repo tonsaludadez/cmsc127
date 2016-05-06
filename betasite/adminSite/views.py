@@ -205,6 +205,11 @@ def DeleteDonation(request, donationno):
 	toDelete.delete()
 	return redirect('adminSite:donationList')
 
+def DeleteEvent(request, eventid):
+	toDelete = Events.objects.get(eventid=eventid)
+	toDelete.delete()
+	return redirect('adminSite:eventList')
+
 def ModifyCoordinator(request):
 	newCoor = Donor.objects.get(donorid=request.POST['donor'])
 	class_year = Class.objects.get(classyear=request.POST['class_year'])

@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^donations/(?P<pk>[0-9]+)/$',views.DonationView.as_view(), name='donation'),
     url(r'^class/(?P<pk>[0-9]+)/$',views.ClassView.as_view(), name='class'),
     url(r'^class/delete/(?P<classyear>[0-9]+)$',views.DeleteClass, name='deleteClass'),
+    url(r'^event/delete/(?P<eventid>[0-9]+)$',views.DeleteEvent, name='deleteEvent'),
     url(r'^class/modify/$',views.ModifyCoordinator, name='modifyCoor'),
     url(r'^report/monthly/$',views.MonthlyReport.as_view(), name='monthlyReport'),
     url(r'^report/annual/$',views.AnnualReport.as_view(), name='annualReport'),

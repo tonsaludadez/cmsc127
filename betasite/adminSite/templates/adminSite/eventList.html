@@ -32,7 +32,7 @@
 					      <td>{{ event.event_name }}</td>
 					      <td>{{ event.event_date }}</td>
 					      <td>
-								<a href="#"><i class="trash icon"></i></a>
+								<a href="{% url 'adminSite:deleteEvent' event.eventid %}"><i class="trash icon"></i></a>
 						  </td>
 					    </tr>
 					{% endfor %}

@@ -116,6 +116,12 @@ class DonationView(LoginRequiredMixin, DetailView):
 	context_object_name = 'donation'
 	template_name = 'adminSite/donation.html'
 
+	def get_context_data(self, **kwargs):
+		context = super(DonationView, self).get_context_data(**kwargs)
+		context['eventDonations'] = EventDonation.objects.filter(donationno=self.object.donationno)
+		
+		return context
+
 class ClassView(LoginRequiredMixin, DetailView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:classList'
@@ -234,6 +240,17 @@ def DeleteDonation(request, donationno):
 
 def DeleteEvent(request, eventid):
 	toDelete = Events.objects.get(eventid=eventid)
+
+	try:
+		check = EventDonation.objects.get(eventid=toDelete)
+	except Exception:
+		check = None
+
+	if check:
+		deleteToo = EventDonation.objects.get(eventid=eventid)
+		deleteToo = EventDonation.objects.get(id=deleteToo.id)
+		deleteToo.delete()
+
 	toDelete.delete()
 	return redirect('adminSite:eventList')
 

@@ -21,7 +21,10 @@
 					  </ul>
 					</div>
 					<h1>Donation</h1>
-					<h4>Pledge Amount: {{ donation.amount }} <br>
+					{% for eventDonation in eventDonations %}
+					<h4>Event: <a href="{% url 'adminSite:event' eventDonation.eventid %}">{{ eventDonation.eventid.event_name }}</a><br>
+					{% endfor %}
+					Pledge Amount: {{ donation.amount }} <br>
 					Pledge Date: {{ donation.pledge_date }}<br>
 					{% with payed=donation.transactions.all|summation %}
 					Paid Amount: {{ payed }}<br>

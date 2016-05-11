@@ -16,20 +16,29 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="twelve wide column">
+						<div class="ui error message transition hidden">
+							<i class="close icon"></i>
+							<div class="header">
+								There was some errors with your submittion
+							</div>
+							<ul class="list">
+								<li>Please fill out the *required fields</li>
+							</ul>
+						</div>
 					<form class="ui form" method="post" action="{% url 'adminSite:newEvent' %}" id="addEventForm">
 						{% csrf_token %}
 						<h4 class="ui dividing header">Event Info</h4>
 						<div class="field">
-							<label>Name</label>
+							<label>Name*</label>
 						</div>
 						<div class="four wide field">
-							<input type="text" placeholder="Event Name" name="event_name">
+							<input type="text" placeholder="Event Name" name="event_name" class="required">
 						</div>
 						<div class="field">
-							<label>Date</label>
+							<label>Date*</label>
 						</div>
 						<div class="four wide field">
-							<input type="text" placeholder="YYYY-MM-DD" name="event_date">
+							<input type="text" placeholder="YYYY-MM-DD" name="event_date" class="required">
 						</div>
 						<div class="ui button" tabindex="0" id="addEvent">Add Event</div>
 					</form>
@@ -41,8 +50,22 @@
 {% block scripts %}
 <script type="text/javascript">
 	$('.ui.dropdown').dropdown();
+	$('.close').click(function() {
+		$(this).closest('.message').transition('fade');
+	});
 	$('#addEvent').click(function() {
-		$('#addEventForm').submit();
+		var valid = true;
+			$('.required').each(function() {
+				if($(this).val()==''){
+					valid = false;
+				}
+			});
+			if(!valid){
+				$('.ui.error.message').transition('fade down');
+			}
+			else {
+				$('#addEventForm').submit();
+			}
 	});
 </script>
 {% endblock %}

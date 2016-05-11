@@ -52,7 +52,7 @@ class Donor(models.Model):
 
 
 class EventDonation(models.Model):
-    eventid = models.ForeignKey('Events', models.DO_NOTHING, db_column='eventid')
+    eventid = models.ForeignKey('Events', models.DO_NOTHING, db_column='eventid', related_name='eventDonation')
     donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', related_name='events')
     donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno')
 

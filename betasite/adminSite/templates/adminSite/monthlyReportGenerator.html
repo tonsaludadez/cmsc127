@@ -1,6 +1,6 @@
 {% extends 'adminSite/base.html' %}
 {% load staticfiles %}
-{% block title %}Beta University Admin: Generate Annual Report{% endblock %}
+{% block title %}Beta University Admin: Generate Monthly Report{% endblock %}
 
 {% block style %}{% endblock %}
 
@@ -12,7 +12,7 @@
 		<div class="row">
 			<div class="three wide column"></div>
 			<div class="twelve wide column">
-				<h1 class="ui center aligned header">Generate Annual Report</h1>
+				<h1 class="ui center aligned header">Generate Monthly Report</h1>
 				<br>
 				<br>
 				<div class="ui centered grid">
@@ -20,8 +20,12 @@
 						<div class="fluid field">
 							<label class="ui center aligned header">Input Year</label>
 							<input type="text" placeholder="Year">
-
 						</div>
+						<div class="fluid field">
+							<label class="ui center aligned header">Input Month</label>
+							<input type="text" placeholder="Month">
+						</div>
+						<br>
 						<div class="field">
 							<button class="massive ui green button">Generate</button>
 						</div>

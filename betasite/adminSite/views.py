@@ -1,5 +1,7 @@
+from django.contrib.admin.models import LogEntry
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.views.generic import  CreateView, DetailView, ListView, RedirectView, TemplateView
@@ -19,6 +21,13 @@ class AdminHome(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:adminHome'
 	template_name = 'adminSite/home.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(AdminHome, self).get_context_data(**kwargs)
+		context['logs'] = LogEntry.objects.all()
+		context['users'] = User.objects.all()
+
+		return context
 
 
 class DonorListView(LoginRequiredMixin, ListView):

@@ -11,6 +11,38 @@
 			<div class="three wide column"></div>
 			<div class="twelve wide column">
 				<h1>Home</h1>
+				<h3>Event Log</h3>
+				<table class="ui sortable single line table">
+				  <thead>
+				    <tr>
+				    	<td>User</td>
+				    	<td>Action</td>
+				    </tr>
+				  </thead>
+				  <tbody>
+				  	{% for log in logs %}
+				    <tr>
+				    	<td>{{ log.user }}</td>
+				    	<td>{{ log }}</td>
+					</tr>
+					{% endfor %}
+				  </tbody>
+				   <tfoot>
+				    <tr>
+				    	<th colspan="10">
+					      	<div class="ui right floated pagination menu">
+					        	<a class="icon item">
+					          		<i class="left chevron icon"></i>
+						       	</a>
+						    	<div class="item">1 of 1</div>
+					        	<a class="icon item">
+					         		<i class="right chevron icon"></i>
+					        	</a>
+					      	</div>
+					    </th>
+				  	</tr>
+				  </tfoot>
+				</table>
 			</div>
 		</div>
 	</div>

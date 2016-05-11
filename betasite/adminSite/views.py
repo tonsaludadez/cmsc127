@@ -25,7 +25,6 @@ class AdminHome(LoginRequiredMixin, TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(AdminHome, self).get_context_data(**kwargs)
 		context['logs'] = LogEntry.objects.all()
-		context['users'] = User.objects.all()
 
 		return context
 
@@ -132,7 +131,7 @@ class MonthlyReport(LoginRequiredMixin, TemplateView):
 class AnnualReport(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:annualReport'
-	template_name = 'adminSite/annualReport.html'
+	template_name = 'adminSite/annualReportGenerator.html'
 
 class EventView(LoginRequiredMixin, DetailView):
 	login_url = 'mainSite:home'

@@ -1,0 +1,35 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Home{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+	<div class="ui grid">
+		<div class="row"></div>
+		<div class="row"></div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="three wide column"></div>
+			<div class="twelve wide column">
+				<h1 class="ui center aligned header">Generate Annual Report</h1>
+				<br>
+				<br>
+				<div class="ui centered grid">
+					<form class="ui form">
+						<div class="fluid field">
+							<label class="ui center aligned header">Input Year</label>
+							<input type="text" placeholder="Year">
+
+						</div>
+						<div class="field">
+							<button class="massive ui green button">Generate</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

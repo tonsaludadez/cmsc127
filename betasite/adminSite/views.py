@@ -221,6 +221,8 @@ def DeleteDonation(request, donationno):
 		deleteToo = EventDonation.objects.get(id=deleteToo.id)
 		deleteToo.delete()
 
+	Transaction.objects.filter(donationno=toDelete).delete()
+
 	toDelete.delete()
 	
 	return redirect('adminSite:donationList')

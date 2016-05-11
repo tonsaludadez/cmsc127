@@ -210,11 +210,19 @@ def DeleteClass(request, classyear):
 
 def DeleteDonation(request, donationno):
 	toDelete = Donation.objects.get(donationno=donationno)
-	if EventDonation.objects.get(donationno=toDelete):
+
+	try:
+		check = EventDonation.objects.get(donationno=toDelete)
+	except EventDonation.DoesNotExist:
+		check = None
+
+	if check:
 		deleteToo = EventDonation.objects.get(donationno=toDelete)
 		deleteToo = EventDonation.objects.get(id=deleteToo.id)
 		deleteToo.delete()
+
 	toDelete.delete()
+	
 	return redirect('adminSite:donationList')
 
 def DeleteEvent(request, eventid):

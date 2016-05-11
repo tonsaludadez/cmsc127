@@ -13,17 +13,27 @@
 					<h2>Add New Donation</h2>
 				</div>
 			</div>
+			
 			<div class="row">
 				<div class="column"></div>
 				<div class="twelve wide column">
+					<div class="ui error message transition hidden">
+						<i class="close icon"></i>
+						<div class="header">
+							There was some errors with your submittion
+						</div>
+						<ul class="list">
+							<li>Please fill out the required fields</li>
+						</ul>
+					</div>
 					<form class="ui form" method="post" action="{% url 'adminSite:newDonation' %}" id="addDonationForm">
 						{% csrf_token %}
 						<h4 class="ui dividing header">Donation Info</h4>
 						<div class="four wide field">
 							<div class="field">
-								<label>Donor Name</label>
+								<label>Donor Name*</label>
 								<div class="ui fluid search selection dropdown">
-									<input type="hidden" name="donorid">
+									<input type="hidden" name="donorid" class="required">
 									<i class="dropdown icon"></i>
 									<div class="default text">Select Donor</div>
 									<div class="menu">
@@ -51,15 +61,15 @@
 						</div>
 						<div class="four wide field">
 							<div class="field">
-								<label>Pledge Amount</label>
+								<label>Pledge Amount*</label>
 								<div class="field">
-									<input type="text" placeholder="Amount" name="amount">
+									<input type="text" placeholder="Amount" name="amount" class="required">
 								</div>
 							</div>
 							<div class="field">
-								<label>Pledge Date</label>
+								<label>Pledge Date*</label>
 								<div>
-									<input type="text" placeholder="YYYY-MM-DD" name="pledge_date">
+									<input type="text" placeholder="YYYY-MM-DD" name="pledge_date" class="required">
 								</div>
 							</div>
 						</div>
@@ -73,8 +83,22 @@
 {% block scripts %}
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
+		$('.close').click(function() {
+			$(this).closest('.message').transition('fade');
+		});
 		$('#addDonation').click(function() {
-			$('#addDonationForm').submit();
+			var valid = true;
+			$('.required').each(function() {
+				if($(this).val()==''){
+					valid = false;
+				}
+			});
+			if(!valid){
+				$('.ui.error.message').transition('fade down');
+			}
+			else {
+				$('#addDonationForm').submit();
+			}
 		});
 	</script>
 {% endblock %}

@@ -195,7 +195,12 @@ def AddTransaction(request):
 
 def DeleteDonor(request, donorid):
 	toDelete = Donor.objects.get(donorid=donorid)
-	classYear = Class.objects.get(coordinator=donorid)
+	
+	try:
+		classYear = Class.objects.get(coordinator=donorid)
+	except Exception, e:
+		classYear = None
+
 	if classYear:
 		classYear.coordinator = None
 		classYear.save()

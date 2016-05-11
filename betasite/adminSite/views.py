@@ -213,7 +213,7 @@ def DeleteDonation(request, donationno):
 
 	try:
 		check = EventDonation.objects.get(donationno=toDelete)
-	except EventDonation.DoesNotExist:
+	except Exception:
 		check = None
 
 	if check:

@@ -35,7 +35,7 @@ class HomePage(TemplateView):
 			return redirect('adminSite:adminHome')
 		else:
 
-			return
+			return redirect('mainSite:home')
 
 
 class AboutUs(TemplateView):
@@ -64,5 +64,5 @@ class AboutUs(TemplateView):
 			return redirect('adminSite:adminHome')
 		else:
 
-			return
+			return redirect('mainSite:home')
 

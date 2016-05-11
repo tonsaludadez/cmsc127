@@ -135,7 +135,6 @@ class EventView(LoginRequiredMixin, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(EventView, self).get_context_data(**kwargs)
 		context['eventDonations'] = EventDonation.objects.filter(eventid=context['event'].eventid)
-		print EventDonation.objects.all()
 		return context
 
 def AddClassForm(request):
@@ -188,6 +187,11 @@ def AddTransaction(request):
 
 def DeleteDonor(request, donorid):
 	toDelete = Donor.objects.get(donorid=donorid)
+	classYear = Class.objects.get(coordinator=donorid)
+	if classYear:
+		classYear.coordinator = None
+		classYear.save()
+
 	toDelete.delete()
 	return redirect('adminSite:donorList')
 
@@ -213,7 +217,6 @@ def DeleteEvent(request, eventid):
 def ModifyCoordinator(request):
 	newCoor = Donor.objects.get(donorid=request.POST['donor'])
 	class_year = Class.objects.get(classyear=request.POST['class_year'])
-	print class_year
 	class_year.coordinator = newCoor
 	class_year.save();
 	return redirect('adminSite:classesList')

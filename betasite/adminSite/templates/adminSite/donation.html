@@ -1,5 +1,6 @@
 {% extends 'adminSite/base.html' %}
 {% load staticfiles %}
+{% load sum %}
 {% block title %}Beta University Admin: Donation{% endblock %}
 
 {% block style %}{% endblock %}
@@ -10,9 +11,22 @@
 			<div class="row">
 				<div class="three wide column"></div>
 				<div class="twelve wide column">
+					<div class="ui error message transition hidden">
+					  <i class="close icon"></i>
+					  <div class="header">
+					    There was some errors with your payment
+					  </div>
+					  <ul class="list">
+					    <li>Amount of payment must be less than or equal to Balance</li>
+					  </ul>
+					</div>
 					<h1>Donation</h1>
-					<h4>Pledge Amount: {{ donation.amount }}</h4>
-					<h4>Pledge Date: {{ donation.pledge_date }}</h4>
+					<h4>Pledge Amount: {{ donation.amount }} <br>
+					Pledge Date: {{ donation.pledge_date }}<br>
+					{% with payed=donation.transactions.all|summation %}
+					Paid Amount: {{ payed }}<br>
+					Balance: {{ donation.amount|sub:payed }}</h4>
+					{% endwith %}
 				</div>
 			</div>
 			<div class="row">
@@ -78,7 +92,7 @@
 					<label>Amount</label>
 				</div>
 				<div class="field">
-					<input type="text" name="payment" placeholder="Amount of Payment">
+					<input type="text" name="payment" placeholder="Amount of Payment" id="payment">
 				</div>
 				<div class="field">
 					<label>Payment Date</label>
@@ -109,8 +123,18 @@
 		$('#makePayment').click(function(){
 			$('.ui.modal').modal('show')
 		});
-		$('#submitPayment').click(function() {
-			$('#makePaymentForm').submit();
+		$('.close').click(function() {
+			$(this).closest('.message').transition('fade');
 		});
+		{% with payed=donation.transactions.all|summation %}
+		$('#submitPayment').click(function() {
+			if(parseInt($('#payment').val()) > parseInt({{ donation.amount|sub:payed }})) {
+				$('.ui.error.message').transition('fade down');
+			}
+			else {
+				$('#makePaymentForm').submit();
+			}
+		});
+		{% endwith %}
 	</script>
 {% endblock %}

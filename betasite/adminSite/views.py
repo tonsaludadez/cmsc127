@@ -1,7 +1,8 @@
-from django.contrib.admin.models import LogEntry
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.views.generic import  CreateView, DetailView, ListView, RedirectView, TemplateView
@@ -176,7 +177,16 @@ def EventReportForm(request):
 def AddClassForm(request):
 	classyear = request.POST['classyear']
 	newClass = Class(classyear=classyear)
+	
 	newClass.save()
+	
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(newClass).pk,
+		object_id=newClass.classyear,
+		object_repr=unicode(newClass),
+		action_flag=ADDITION)
+
 	return redirect('adminSite:classesList')
 
 def AddDonorForm(request):
@@ -188,7 +198,16 @@ def AddDonorForm(request):
 	email = request.POST['email']
 	class_field = Class.objects.get(classyear=request.POST['class_field'])
 	newDonor = Donor(fname=fname, mname=mname, lname=lname, contactno=contactno, creditno=creditno, email=email, class_field=class_field)
+	
 	newDonor.save()
+	
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(newDonor).pk,
+		object_id=newDonor.donorid,
+		object_repr=unicode(newDonor),
+		action_flag=ADDITION)
+
 	return redirect('adminSite:donorList')
 
 def AddDonationForm(request):
@@ -196,7 +215,16 @@ def AddDonationForm(request):
 	pledge_date = request.POST['pledge_date']
 	donorid = Donor.objects.get(donorid=request.POST['donorid'])
 	newDonation = Donation(donorid=donorid, amount=amount,pledge_date=pledge_date)
+
 	newDonation.save()
+
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(donationno).pk,
+		object_id=newDonation.donationno,
+		object_repr=unicode(newDonation),
+		action_flag=ADDITION)
+
 	if request.POST['eventid']:
 		eventid = Events.objects.get(eventid=request.POST['eventid'])
 		newEventDonation = EventDonation(donorid=donorid, donationno=newDonation, eventid=eventid)
@@ -208,7 +236,16 @@ def AddEventForm(request):
 	event_name = request.POST['event_name']
 	event_date = request.POST['event_date']
 	newEvent = Events(event_name=event_name, event_date=event_date)
+
 	newEvent.save()
+
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(newEvent).pk,
+		object_id=newEvent.eventid,
+		object_repr=unicode(newEvent),
+		action_flag=ADDITION)
+
 	return redirect('adminSite:eventList')
 
 def AddTransaction(request):
@@ -217,7 +254,15 @@ def AddTransaction(request):
 	amount_paid = request.POST['payment']
 	date_paid = request.POST['date']
 	newTransaction = Transaction(donationno=donationno, donorid=donorid, amount_paid=amount_paid, date_paid=date_paid)
+
 	newTransaction.save()
+	
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(newTransaction).pk,
+		object_id=newTransaction.id,
+		object_repr=unicode(newTransaction),
+		action_flag=ADDITION)
 
 	return redirect('adminSite:donationList')
 
@@ -233,12 +278,28 @@ def DeleteDonor(request, donorid):
 		classYear.coordinator = None
 		classYear.save()
 
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(toDelete).pk,
+		object_id=toDelete.donorid,
+		object_repr=unicode(toDelete),
+		action_flag=DELETION)
+
 	toDelete.delete()
 	return redirect('adminSite:donorList')
 
 def DeleteClass(request, classyear):
 	toDelete = Class.objects.get(classyear=classyear)
+
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(toDelete).pk,
+		object_id=toDelete.classyear,
+		object_repr=unicode(toDelete.classyear),
+		action_flag=DELETION)
+
 	toDelete.delete()
+
 	return redirect('adminSite:classesList')
 
 def DeleteDonation(request, donationno):
@@ -255,6 +316,13 @@ def DeleteDonation(request, donationno):
 		deleteToo.delete()
 
 	Transaction.objects.filter(donationno=toDelete).delete()
+
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(toDelete).pk,
+		object_id=toDelete.donationno,
+		object_repr=unicode(toDelete.donationno),
+		action_flag=DELETION)
 
 	toDelete.delete()
 	
@@ -273,13 +341,59 @@ def DeleteEvent(request, eventid):
 		deleteToo = EventDonation.objects.get(id=deleteToo.id)
 		deleteToo.delete()
 
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(toDelete).pk,
+		object_id=toDelete.eventid,
+		object_repr=unicode(toDelete.event_name),
+		action_flag=DELETION)
+
 	toDelete.delete()
+
 	return redirect('adminSite:eventList')
 
 def ModifyCoordinator(request):
 	newCoor = Donor.objects.get(donorid=request.POST['donor'])
 	class_year = Class.objects.get(classyear=request.POST['class_year'])
 	class_year.coordinator = newCoor
+
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(class_year).pk,
+		object_id=class_year.classyear,
+		object_repr=unicode(class_year),
+		action_flag=CHANGE)
+
 	class_year.save();
+
 	return redirect('adminSite:classesList')
+
+def ModifyDonor(request):
+	donorid = request.POST['donorid']
+	fname = request.POST['fname']
+	mname = request.POST['mname']
+	lname = request.POST['lname']
+	contactno = request.POST['contactno']
+	creditno = request.POST['creditno']
+	email = request.POST['email']
+	class_field = Class.objects.get(classyear=request.POST['class_field'])
+	donor = Donor.objects.get(donorid=donorid)
+	donor.fname = fname
+	donor.mname = mname
+	donor.lname = lname
+	donor.contactno = contactno
+	donor.creditno = creditno
+	donor.email = email
+	donor.class_field = class_field
+
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(donor).pk,
+		object_id=donor.donorid,
+		object_repr=unicode(donor),
+		action_flag=CHANGE)
+
+	donor.save()
+
+	return redirect('adminSite:donorList')
 

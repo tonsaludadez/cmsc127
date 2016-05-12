@@ -237,7 +237,7 @@ def AddDonationForm(request):
 
 	LogEntry.objects.log_action(
 		user_id=request.user.id,
-		content_type_id=ContentType.objects.get_for_model(donationno).pk,
+		content_type_id=ContentType.objects.get_for_model(newDonation).pk,
 		object_id=newDonation.donationno,
 		object_repr=unicode(newDonation),
 		action_flag=ADDITION)

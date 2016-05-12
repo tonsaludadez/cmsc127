@@ -171,8 +171,9 @@ class EventReport(LoginRequiredMixin, DetailView):
 	template_name = 'adminSite/eventReport.html'
 
 def EventReportForm(request):
-	eventid = Events.objects.get(eventid=request.POST['eventid'])
-	return redirect('adminSite:EventReport', eventid)
+	event = Events.objects.get(eventid=request.POST['eventid'])
+	print event
+	return redirect('adminSite:eventReport', event)
 
 def AddClassForm(request):
 	classyear = request.POST['classyear']

@@ -151,6 +151,28 @@ class EventView(LoginRequiredMixin, DetailView):
 		context['eventDonations'] = EventDonation.objects.filter(eventid=context['event'].eventid)
 		return context
 
+class EventReportGenerator(LoginRequiredMixin, TemplateView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:eventReportGenerator'
+	template_name = 'adminSite/eventReportGenerator.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(EventReportGenerator, self).get_context_data(**kwargs)
+		context['events'] = Events.objects.all()
+
+		return context
+
+class EventReport(LoginRequiredMixin, DetailView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:eventReport'
+	model = Events
+	context_object_name = 'event'
+	template_name = 'adminSite/eventReport.html'
+
+def EventReportForm(request):
+	eventid = Events.objects.get(eventid=request.POST['eventid'])
+	return redirect('adminSite:EventReport', eventid)
+
 def AddClassForm(request):
 	classyear = request.POST['classyear']
 	newClass = Class(classyear=classyear)

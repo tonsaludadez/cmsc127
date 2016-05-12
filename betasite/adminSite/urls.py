@@ -30,4 +30,7 @@ urlpatterns = [
     url(r'^class/modify/$',views.ModifyCoordinator, name='modifyCoor'),
     url(r'^report/monthly/$',views.MonthlyReport.as_view(), name='monthlyReport'),
     url(r'^report/annual/$',views.AnnualReport.as_view(), name='annualReport'),
+    url(r'^report/event/$',views.EventReportGenerator.as_view(), name='eventReportGenerator'),
+    url(r'^report/event/(?P<pk>[0-9]+)/$',views.EventReport.as_view(), name='eventReport'),
+    url(r'^report/event/submit/$',views.EventReportForm, name='eventReportForm')
 ]

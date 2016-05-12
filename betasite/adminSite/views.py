@@ -180,6 +180,12 @@ class EventReport(LoginRequiredMixin, DetailView):
 	context_object_name = 'event'
 	template_name = 'adminSite/eventReport.html'
 
+	def get_context_data(self, **kwargs):
+		context = super(EventReport, self).get_context_data(**kwargs)
+		context['eventDonations'] = EventDonation.objects.filter(eventid=kwargs['object'])
+
+		return context	
+
 def EventReportForm(request):
 	event = Events.objects.get(eventid=request.POST['eventid'])
 	print event

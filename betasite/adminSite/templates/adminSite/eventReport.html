@@ -1,5 +1,6 @@
 {% extends 'adminSite/base.html' %}
 {% load staticfiles %}
+{% load sum %}
 {% block title %}Beta University Admin: Event Report{% endblock %}
 
 {% block style %}{% endblock %}
@@ -25,7 +26,13 @@
 					    </tr>
 					  </thead>
 					  <tbody>
-						  <td></td>  	
+					  	{% for donation in eventDonations %}
+					  	<tr>
+					  		<td>{{ donation.donorid }}</td>
+					  		<td>{{ donation.donationno.amount }} PHP</td>
+					  		<td>{{ donation.donationno.transactions.all|summation }} PHP</td>
+					  	</tr>
+						{% endfor %}
 					  </tbody>
 					   <tfoot></tfoot>
 					</table>

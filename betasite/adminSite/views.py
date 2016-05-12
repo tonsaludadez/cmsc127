@@ -130,10 +130,15 @@ class ClassView(LoginRequiredMixin, DetailView):
 	context_object_name = 'class'
 	template_name = 'adminSite/class.html'
 
+class MonthlyReportGenerator(LoginRequiredMixin, TemplateView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:monthlyReportGenerator'
+	template_name = 'adminSite/monthlyReportGenerator.html'
+
 class MonthlyReport(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:monthlyReport'
-	template_name = 'adminSite/monthlyReportGenerator.html'
+	template_name = 'adminSite/monthlyReport.html'
 
 class AnnualReport(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'

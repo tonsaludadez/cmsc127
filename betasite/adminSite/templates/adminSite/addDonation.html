@@ -74,6 +74,7 @@
 							</div>
 						</div>
 						<div class="ui primary button" tabindex="0" id="addDonation">Add Donation</div>
+						<div class="ui primary button" id="restoreDropdown">Restore All Dropdowns</div>
 					</form>
 				</div>
 			</div>
@@ -100,5 +101,11 @@
 				$('#addDonationForm').submit();
 			}
 		});
+		$('#restoreDropdown')
+  			.on('click', function() {
+    			$('.ui.dropdown')
+      				.dropdown('restore defaults')
+    			;
+  		});
 	</script>
 {% endblock %}

@@ -97,6 +97,7 @@
 							<input type="text" placeholder="Credit Card Number" name="creditno">
 						</div>
 						<div class="ui button primary" tabindex="0" id="addButton">Add Donor</div>
+						<div class="ui primary button" id="restoreDropdown">Restore All Dropdowns</div>
 					</form>
 				</div>
 			</div>
@@ -124,5 +125,11 @@
 				$('#donorForm').submit();
 			}
 		});
+		$('#restoreDropdown')
+  			.on('click', function() {
+    			$('.ui.dropdown')
+      				.dropdown('restore defaults')
+    			;
+  		});
 	</script>
 {% endblock %}

@@ -41,6 +41,7 @@ class Donor(models.Model):
     donor_affiliation = models.ForeignKey('self', models.DO_NOTHING, db_column='donor_affiliation', blank=True, null=True)
     class_field = models.ForeignKey(Class, models.DO_NOTHING, db_column='class', blank=True, null=True, related_name='donors')  # Field renamed because it was a Python reserved word.
     category = models.CharField(max_length=20, blank=True, null=True)
+    address = models.CharField(max_length=300, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -55,6 +56,7 @@ class EventDonation(models.Model):
     eventid = models.ForeignKey('Events', models.DO_NOTHING, db_column='eventid', related_name='eventDonation')
     donorid = models.ForeignKey(Donor, models.DO_NOTHING, db_column='donorid', related_name='events')
     donationno = models.ForeignKey(Donation, models.DO_NOTHING, db_column='donationno')
+    #id = models.BigIntegerField()
 
     class Meta:
         managed = False

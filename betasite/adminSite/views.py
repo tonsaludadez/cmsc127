@@ -213,8 +213,9 @@ def AddDonorForm(request):
 	contactno = request.POST['contactno']
 	creditno = request.POST['creditno']
 	email = request.POST['email']
+	address = request.POST['address']
 	class_field = Class.objects.get(classyear=request.POST['class_field'])
-	newDonor = Donor(fname=fname, mname=mname, lname=lname, contactno=contactno, creditno=creditno, email=email, class_field=class_field)
+	newDonor = Donor(fname=fname, mname=mname, lname=lname, contactno=contactno, creditno=creditno, email=email, class_field=class_field, address=address)
 	
 	newDonor.save()
 	

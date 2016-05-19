@@ -90,6 +90,7 @@
 						</div>
 						<div class="ui button primary" tabindex="0" id="addButton">Save Changes</div>
 						<div class="ui button primary" id="cancel">Cancel</div>
+						<div class="ui primary button" id="restoreDropdown">Restore All Dropdowns</div>
 					</form>
 				</div>
 			</div>
@@ -106,5 +107,11 @@
 		$('#cancel').click(function() {
 			location.href = "{% url 'adminSite:donor' donor.donorid %}";
 		});
+		$('#restoreDropdown')
+  			.on('click', function() {
+    			$('.ui.dropdown')
+      				.dropdown('restore defaults')
+    			;
+  		});
 	</script>
 {% endblock %}

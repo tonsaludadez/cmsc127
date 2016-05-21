@@ -38,9 +38,11 @@
 					   <tfoot>
 					    <tr>
 					    	<th colspan="10">
+					    		{% if not is_not_authorized %}
 					    		<div class="ui left floated small primary labeled icon button" id="addClass">
 						        	<i class="users icon"></i> Add Class
 						        </div>
+						        {% endif %}
 						      	<div class="ui right floated pagination menu">
 						        	<a class="icon item">
 						          		<i class="left chevron icon"></i>

@@ -30,12 +30,14 @@
 					</div>
 				</div>
 				<div class="column"></div>
+				{% if not is_not_authorized %}
 				<div class="column">
 					<button class="ui basic icon button" id="edit">
 						<i class="edit icon"></i>
 						Edit Profile
 					</button>
 				</div>
+				{% endif %}
 			</div>
 			<div class="row">
 				<div class="column"></div>

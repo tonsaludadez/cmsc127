@@ -1,0 +1,101 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Add User{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+	<div class="ui five column grid">
+			<div class="row"></div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="column">
+					<h2>Add New User</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="twelve wide column">
+					<div class="ui error message transition hidden">
+						<i class="close icon"></i>
+						<div class="header">
+							There was some errors with your submittion
+						</div>
+						<ul class="list">
+							<li>Please fill out the *required fields</li>
+						</ul>
+					</div>
+					<form class="ui form" action="{% url 'adminSite:newUser' %}" method="post" id="userForm">
+						{% csrf_token %}
+						<div class="three wide field">
+							<label>Username*</label>
+							<input type="text" placeholder="Username*" name="username" class="required">
+						</div>
+
+						<div class="three wide field">
+							<label>Password*</label>
+							<input type="password" placeholder="Password*" name="password" class="required" id="password">
+						</div>
+
+						<div class="three wide field">
+							<label>Confirm Password*</label>
+							<input type="password" placeholder="Confirm Password*" name="confirmpassword" class="required" id="confirm_password">
+							<div class="ui pointing red basic label hidden" id="perror">
+						      Passwords doesn't match
+						    </div>
+						</div>
+						
+						<div class="three wide field">
+							<label>Group*</label>
+							<div class="ui fluid search selection dropdown">
+								<input type="hidden" name="groups" class="required">
+								<i class="dropdown icon"></i>
+								<div class="default text">Select Group</div>
+								<div class="menu">
+								{% for group in groups %}
+									<div class="item" data-value="{{ group }}">{{ group }}</div>
+								{% endfor %}
+								</div>
+							</div>
+						</div>
+						<div class="ui button primary" tabindex="0" id="addButton">Add User</div>
+						<div class="ui primary button" id="restoreDropdown">Restore All Dropdowns</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+		$('.close').click(function() {
+			$(this).closest('.message').transition('fade');
+		});
+		$('#addButton').click(function() {
+			var valid = true;
+			$('.required').each(function() {
+				if($(this).val()==''){
+					valid = false;
+				}
+			});
+			if(!valid){
+				$('.ui.error.message').transition('fade down');
+			}
+			else {
+				if($('#password').val() == $('#confirm_password').val())
+					$('#userForm').submit();
+				else {
+					$('#perror').removeClass("hidden");
+				}
+			}
+		});
+		$('#restoreDropdown')
+  			.on('click', function() {
+    			$('.ui.dropdown')
+      				.dropdown('restore defaults')
+    			;
+  		});
+	</script>
+{% endblock %}

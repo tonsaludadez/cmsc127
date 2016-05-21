@@ -34,4 +34,8 @@ urlpatterns = [
     url(r'^report/event/$',views.EventReportGenerator.as_view(), name='eventReportGenerator'),
     url(r'^report/event/(?P<pk>[0-9]+)/$',views.EventReport.as_view(), name='eventReport'),
     url(r'^report/event/submit/$',views.EventReportForm, name='eventReportForm'),
+    url(r'^users/$',views.UserListView.as_view(), name='userList'),
+    url(r'^users/addUser$',views.AddUserView.as_view(), name='addUser'),
+    url(r'^users/submit/$',views.AddUserForm, name='newUser'),
+     url(r'^users/delete/(?P<pk>[0-9]+)$',views.DeleteUser, name='deleteUser'),
 ]

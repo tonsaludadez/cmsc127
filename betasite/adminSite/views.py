@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum
 from django.shortcuts import redirect, render
@@ -27,6 +27,7 @@ class AdminHome(LoginRequiredMixin, TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(AdminHome, self).get_context_data(**kwargs)
 		context['logs'] = LogEntry.objects.all()
+		context['is_admin'] = not self.request.user.groups.all().exists()
 
 		return context
 
@@ -37,11 +38,25 @@ class DonorListView(LoginRequiredMixin, ListView):
 	template_name = 'adminSite/donorList.html'
 	model = Donor
 
+	def get_context_data(self, **kwargs):
+		context = super(DonorListView, self).get_context_data(**kwargs)
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
+
 class EventListView(LoginRequiredMixin, ListView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:eventList'
 	template_name = 'adminSite/eventList.html'
 	model = Events
+
+	def get_context_data(self, **kwargs):
+		context = super(EventListView, self).get_context_data(**kwargs)
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
 
 class DonationListView(LoginRequiredMixin, ListView):
 	login_url = 'mainSite:home'
@@ -49,11 +64,43 @@ class DonationListView(LoginRequiredMixin, ListView):
 	template_name = 'adminSite/donationList.html'
 	model = Donation
 
+	def get_context_data(self, **kwargs):
+		context = super(DonationListView, self).get_context_data(**kwargs)
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
+
 class ClassesListView(LoginRequiredMixin, ListView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:classList'
 	template_name = 'adminSite/classList.html'
 	model = Class
+
+	def get_context_data(self, **kwargs):
+		context = super(ClassesListView, self).get_context_data(**kwargs)
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
+
+class UserListView(LoginRequiredMixin, ListView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:userList'
+	template_name = 'adminSite/userList.html'
+	model = User
+
+	def get_context_data(self, **kwargs):
+		context = super(UserListView, self).get_context_data(**kwargs)
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
+
+	def get(self, request, *args, **kwargs):
+		if request.user.groups.all().exists():
+			return redirect('adminSite:adminHome')
+		return super(UserListView, self).get(request, *args, **kwargs)
 
 class AddDonorView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
@@ -64,8 +111,26 @@ class AddDonorView(LoginRequiredMixin, TemplateView):
 		context = super(AddDonorView, self).get_context_data(**kwargs)
 		context['classes'] = Class.objects.all()
 		context['donors'] = Donor.objects.all()
+		context['is_admin'] = not self.request.user.groups.all().exists()
 
 		return context
+
+class AddUserView(LoginRequiredMixin, TemplateView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:addUser'
+	template_name = 'adminSite/addUser.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(AddUserView, self).get_context_data(**kwargs)
+		context['is_admin'] = not self.request.user.groups.all().exists()
+		context['groups'] = Group.objects.all()
+
+		return context
+
+	def get(self, request, *args, **kwargs):
+		if request.user.groups.all().exists():
+			return redirect('adminSite:adminHome')
+		return super(AddUserView, self).get(request, *args, **kwargs)
 
 class EditDonorView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
@@ -78,6 +143,7 @@ class EditDonorView(LoginRequiredMixin, TemplateView):
 		context['donor'] = Donor.objects.get(donorid=donorid)
 		context['classes'] = Class.objects.all()
 		context['donors'] = Donor.objects.all()
+		context['is_admin'] = not self.request.user.groups.all().exists()
 
 		return context
 
@@ -85,6 +151,12 @@ class AddEventView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:addEvent'
 	template_name = 'adminSite/addEvent.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(AddEventView, self).get_context_data(**kwargs)
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
 
 class AddDonationView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
@@ -95,6 +167,7 @@ class AddDonationView(LoginRequiredMixin, TemplateView):
 		context = super(AddDonationView, self).get_context_data(**kwargs)
 		context['donors'] = Donor.objects.all()
 		context['events'] = Events.objects.all()
+		context['is_admin'] = not self.request.user.groups.all().exists()
 
 		return context
 
@@ -108,6 +181,8 @@ class DonorView(LoginRequiredMixin, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(DonorView, self).get_context_data(**kwargs)
 		context['eventDonations'] = EventDonation.objects.filter(donorid=self.object.donorid)
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
 		
 		return context
 
@@ -121,7 +196,9 @@ class DonationView(LoginRequiredMixin, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(DonationView, self).get_context_data(**kwargs)
 		context['eventDonations'] = EventDonation.objects.filter(donationno=self.object.donationno)
-		
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
 		return context
 
 class ClassView(LoginRequiredMixin, DetailView):
@@ -130,6 +207,13 @@ class ClassView(LoginRequiredMixin, DetailView):
 	model = Class
 	context_object_name = 'class'
 	template_name = 'adminSite/class.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(ClassView, self).get_context_data(**kwargs)
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+		
+		return context
 
 class MonthlyReportGenerator(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
@@ -161,6 +245,8 @@ class EventView(LoginRequiredMixin, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(EventView, self).get_context_data(**kwargs)
 		context['eventDonations'] = EventDonation.objects.filter(eventid=context['event'].eventid)
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
 		return context
 
 class EventReportGenerator(LoginRequiredMixin, TemplateView):
@@ -171,6 +257,7 @@ class EventReportGenerator(LoginRequiredMixin, TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(EventReportGenerator, self).get_context_data(**kwargs)
 		context['events'] = Events.objects.all()
+		context['is_admin'] = not self.request.user.groups.all().exists()
 
 		return context
 
@@ -184,6 +271,7 @@ class EventReport(LoginRequiredMixin, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(EventReport, self).get_context_data(**kwargs)
 		context['eventDonations'] = EventDonation.objects.filter(eventid=kwargs['object'])
+		context['is_admin'] = not self.request.user.groups.all().exists()
 
 		return context	
 
@@ -199,9 +287,7 @@ def AddClassForm(request):
 	newClass = Class(classyear=classyear)
 	
 	try:
-		if request.user.groups.filter(name='Moderator').exists():
-			newClass.save(using='moderator')
-		elif request.user.groups.filter(name='Coordinator').exists():
+		if request.user.groups.filter(name='Coordinator').exists():
 			newClass.save(using='coordinator')
 		else :
 			newClass.save()
@@ -230,9 +316,7 @@ def AddDonorForm(request):
 	newDonor = Donor(fname=fname, mname=mname, lname=lname, contactno=contactno, creditno=creditno, email=email, class_field=class_field, address=address)
 	
 	try:
-		if request.user.groups.filter(name='Moderator').exists():
-			newDonor.save(using='moderator')
-		elif request.user.groups.filter(name='Coordinator').exists():
+		if request.user.groups.filter(name='Coordinator').exists():
 			newDonor.save(using='coordinator')
 		else :
 			newDonor.save()
@@ -249,6 +333,29 @@ def AddDonorForm(request):
 	return redirect('adminSite:donorList')
 
 @login_required(login_url='mainSite:home')
+def AddUserForm(request):
+	if request.user.groups.all().exists():
+		return redirect('adminSite:adminHome')
+
+	username = request.POST['username']
+	password = request.POST['password']
+	groups = Group.objects.get(name=request.POST['groups'])
+	newUser = User(username=username, password=password)
+	
+	newUser.save()
+
+	groups.user_set.add(newUser)
+
+	# LogEntry.objects.log_action(
+	# 	user_id=request.user.id,
+	# 	content_type_id=ContentType.objects.get_for_model(newDonor).pk,
+	# 	object_id=newDonor.donorid,
+	# 	object_repr=unicode(newDonor),
+	# 	action_flag=ADDITION)
+
+	return redirect('adminSite:userList')
+
+@login_required(login_url='mainSite:home')
 def AddDonationForm(request):
 	amount = request.POST['amount']
 	pledge_date = request.POST['pledge_date']
@@ -256,9 +363,7 @@ def AddDonationForm(request):
 	newDonation = Donation(donorid=donorid, amount=amount,pledge_date=pledge_date)
 	
 	try:
-		if request.user.groups.filter(name='Moderator').exists():
-			newDonation.save(using='moderator')
-		elif request.user.groups.filter(name='Coordinator').exists():
+		if request.user.groups.filter(name='Coordinator').exists():
 			newDonation.save(using='coordinator')
 		else :
 			newDonation.save()
@@ -286,13 +391,12 @@ def AddEventForm(request):
 	newEvent = Events(event_name=event_name, event_date=event_date)
 
 	try:
-		if request.user.groups.filter(name='Moderator').exists():
-			newEvent.save(using='moderator')
-		elif request.user.groups.filter(name='Coordinator').exists():
+		if request.user.groups.filter(name='Coordinator').exists():
 			newEvent.save(using='coordinator')
 		else :
 			newEvent.save()
 	except Exception, e:
+		print "Error"
 		return redirect('adminSite:eventList')
 
 	LogEntry.objects.log_action(
@@ -313,9 +417,7 @@ def AddTransaction(request):
 	newTransaction = Transaction(donationno=donationno, donorid=donorid, amount_paid=amount_paid, date_paid=date_paid)
 
 	try:
-		if request.user.groups.filter(name='Moderator').exists():
-			newTransaction.save(using='moderator')
-		elif request.user.groups.filter(name='Coordinator').exists():
+		if request.user.groups.filter(name='Coordinator').exists():
 			newTransaction.save(using='coordinator')
 		else :
 			newTransaction.save()
@@ -432,6 +534,24 @@ def DeleteEvent(request, eventid):
 	toDelete.delete()
 
 	return redirect('adminSite:eventList')
+
+@login_required(login_url='mainSite:home')
+def DeleteUser(request, pk):
+	if request.user.groups.all().exists():
+		return redirect('adminSite:adminHome')
+
+	toDelete = User.objects.get(pk=pk)
+
+	# LogEntry.objects.log_action(
+	# 	user_id=request.user.id,
+	# 	content_type_id=ContentType.objects.get_for_model(toDelete).pk,
+	# 	object_id=toDelete.donationno,
+	# 	object_repr=unicode(toDelete.donationno),
+	# 	action_flag=DELETION)
+
+	toDelete.delete()
+	
+	return redirect('adminSite:userList')
 
 @login_required(login_url='mainSite:home')
 def ModifyCoordinator(request):

@@ -15,6 +15,9 @@
 		<div class="item">
 			<div class="header">Tables</div>
 			<div class="menu">
+				{% if is_admin %}
+				<a href="{% url 'adminSite:userList' %}" class="item">Users</a>
+				{% endif %}
 				<a href="{% url 'adminSite:donorList' %}" class="item">Donors</a>
 				<a href="{% url 'adminSite:eventList' %}" class="item">Events</a>
 				<a href="{% url 'adminSite:donationList' %}" class="item">Donations</a>

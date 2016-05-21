@@ -12,6 +12,13 @@
 				<div class="column">
 					<h2>Donors</h2>
 				</div>
+				<div class="ui fluid category search">
+  					<div class="ui icon input">
+    					<input class="prompt" type="text" placeholder="Search donor...">
+    					<i class="search icon"></i>
+  					</div>
+  					<div class="results"></div>
+				</div>
 			</div>
 			<div class="row">
 				<div class="column"></div>
@@ -67,5 +74,9 @@
 			location.href = "{% url 'adminSite:addDonor' %}";
 		});
 		$('.sortable.table').tablesort();
+		$('.ui.search')
+  			.search({
+    		source: content
+  		});
 	</script>
 {% endblock %}

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -186,17 +187,27 @@ class EventReport(LoginRequiredMixin, DetailView):
 
 		return context	
 
+@login_required(login_url='mainSite:home')
 def EventReportForm(request):
 	event = Events.objects.get(eventid=request.POST['eventid'])
 	print event
 	return redirect('adminSite:eventReport', event)
 
+@login_required(redirect_field_name='my_redirect_field')
 def AddClassForm(request):
 	classyear = request.POST['classyear']
 	newClass = Class(classyear=classyear)
 	
-	newClass.save()
-	
+	try:
+		if request.user.groups.filter(name='Moderator').exists():
+			newClass.save(using='moderator')
+		elif request.user.groups.filter(name='Coordinator').exists():
+			newClass.save(using='coordinator')
+		else :
+			newClass.save()
+	except Exception, e:
+		return redirect('adminSite:classesList')
+		
 	LogEntry.objects.log_action(
 		user_id=request.user.id,
 		content_type_id=ContentType.objects.get_for_model(newClass).pk,
@@ -206,6 +217,7 @@ def AddClassForm(request):
 
 	return redirect('adminSite:classesList')
 
+@login_required(login_url='mainSite:home')
 def AddDonorForm(request):
 	fname = request.POST['fname']
 	mname = request.POST['mname']
@@ -217,8 +229,16 @@ def AddDonorForm(request):
 	class_field = Class.objects.get(classyear=request.POST['class_field'])
 	newDonor = Donor(fname=fname, mname=mname, lname=lname, contactno=contactno, creditno=creditno, email=email, class_field=class_field, address=address)
 	
-	newDonor.save()
-	
+	try:
+		if request.user.groups.filter(name='Moderator').exists():
+			newDonor.save(using='moderator')
+		elif request.user.groups.filter(name='Coordinator').exists():
+			newDonor.save(using='coordinator')
+		else :
+			newDonor.save()
+	except Exception, e:
+		return redirect('adminSite:donorList')
+
 	LogEntry.objects.log_action(
 		user_id=request.user.id,
 		content_type_id=ContentType.objects.get_for_model(newDonor).pk,
@@ -228,13 +248,22 @@ def AddDonorForm(request):
 
 	return redirect('adminSite:donorList')
 
+@login_required(login_url='mainSite:home')
 def AddDonationForm(request):
 	amount = request.POST['amount']
 	pledge_date = request.POST['pledge_date']
 	donorid = Donor.objects.get(donorid=request.POST['donorid'])
 	newDonation = Donation(donorid=donorid, amount=amount,pledge_date=pledge_date)
-
-	newDonation.save()
+	
+	try:
+		if request.user.groups.filter(name='Moderator').exists():
+			newDonation.save(using='moderator')
+		elif request.user.groups.filter(name='Coordinator').exists():
+			newDonation.save(using='coordinator')
+		else :
+			newDonation.save()
+	except Exception, e:
+		return redirect('adminSite:donationList')
 
 	LogEntry.objects.log_action(
 		user_id=request.user.id,
@@ -250,12 +279,21 @@ def AddDonationForm(request):
 
 	return redirect('adminSite:donationList')
 
+@login_required(login_url='mainSite:home')
 def AddEventForm(request):
 	event_name = request.POST['event_name']
 	event_date = request.POST['event_date']
 	newEvent = Events(event_name=event_name, event_date=event_date)
 
-	newEvent.save()
+	try:
+		if request.user.groups.filter(name='Moderator').exists():
+			newEvent.save(using='moderator')
+		elif request.user.groups.filter(name='Coordinator').exists():
+			newEvent.save(using='coordinator')
+		else :
+			newEvent.save()
+	except Exception, e:
+		return redirect('adminSite:eventList')
 
 	LogEntry.objects.log_action(
 		user_id=request.user.id,
@@ -266,6 +304,7 @@ def AddEventForm(request):
 
 	return redirect('adminSite:eventList')
 
+@login_required(login_url='mainSite:home')
 def AddTransaction(request):
 	donationno = Donation.objects.get(donationno=request.POST['donationno'])
 	donorid = Donor.objects.get(donorid=request.POST['donorid'])
@@ -273,7 +312,15 @@ def AddTransaction(request):
 	date_paid = request.POST['date']
 	newTransaction = Transaction(donationno=donationno, donorid=donorid, amount_paid=amount_paid, date_paid=date_paid)
 
-	newTransaction.save()
+	try:
+		if request.user.groups.filter(name='Moderator').exists():
+			newTransaction.save(using='moderator')
+		elif request.user.groups.filter(name='Coordinator').exists():
+			newTransaction.save(using='coordinator')
+		else :
+			newTransaction.save()
+	except Exception, e:
+		return redirect('adminSite:donationList')
 	
 	LogEntry.objects.log_action(
 		user_id=request.user.id,
@@ -284,7 +331,11 @@ def AddTransaction(request):
 
 	return redirect('adminSite:donationList')
 
+@login_required(login_url='mainSite:home')
 def DeleteDonor(request, donorid):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:donorList')
+
 	toDelete = Donor.objects.get(donorid=donorid)
 	
 	try:
@@ -306,7 +357,11 @@ def DeleteDonor(request, donorid):
 	toDelete.delete()
 	return redirect('adminSite:donorList')
 
+@login_required(login_url='mainSite:home')
 def DeleteClass(request, classyear):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:classesList')
+	
 	toDelete = Class.objects.get(classyear=classyear)
 
 	LogEntry.objects.log_action(
@@ -320,7 +375,11 @@ def DeleteClass(request, classyear):
 
 	return redirect('adminSite:classesList')
 
+@login_required(login_url='mainSite:home')
 def DeleteDonation(request, donationno):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:donationList')
+
 	toDelete = Donation.objects.get(donationno=donationno)
 
 	try:
@@ -346,7 +405,11 @@ def DeleteDonation(request, donationno):
 	
 	return redirect('adminSite:donationList')
 
+@login_required(login_url='mainSite:home')
 def DeleteEvent(request, eventid):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:eventList')
+
 	toDelete = Events.objects.get(eventid=eventid)
 
 	try:
@@ -370,7 +433,11 @@ def DeleteEvent(request, eventid):
 
 	return redirect('adminSite:eventList')
 
+@login_required(login_url='mainSite:home')
 def ModifyCoordinator(request):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:classesList')
+
 	newCoor = Donor.objects.get(donorid=request.POST['donor'])
 	class_year = Class.objects.get(classyear=request.POST['class_year'])
 	class_year.coordinator = newCoor
@@ -386,7 +453,11 @@ def ModifyCoordinator(request):
 
 	return redirect('adminSite:classesList')
 
+@login_required(login_url='mainSite:home')
 def ModifyDonor(request):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:donorList')
+
 	donorid = request.POST['donorid']
 	fname = request.POST['fname']
 	mname = request.POST['mname']

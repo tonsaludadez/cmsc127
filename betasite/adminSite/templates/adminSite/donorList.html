@@ -76,6 +76,11 @@
 
 {% block scripts %}
 	<script type="text/javascript">
+		var content = [
+		{% for donor in object_list %}
+		{title: '{{ donor.lname }}, {{ donor.fname }} {{ donor.mname }}'},
+		{% endfor %}
+		];
 		$('#addDonor').click(function() {
 			location.href = "{% url 'adminSite:addDonor' %}";
 		});
@@ -83,6 +88,7 @@
 		$('.ui.search')
   			.search({
     		source: content
+			
   		});
 	</script>
 {% endblock %}

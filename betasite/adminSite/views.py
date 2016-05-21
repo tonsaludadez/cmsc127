@@ -372,12 +372,12 @@ def AddUserForm(request):
 
 	groups.user_set.add(newUser)
 
-	# LogEntry.objects.log_action(
-	# 	user_id=request.user.id,
-	# 	content_type_id=ContentType.objects.get_for_model(newDonor).pk,
-	# 	object_id=newDonor.donorid,
-	# 	object_repr=unicode(newDonor),
-	# 	action_flag=ADDITION)
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(newUser).pk,
+		object_id=newUser.pk,
+		object_repr=unicode(newUser),
+		action_flag=ADDITION)
 
 	return redirect('adminSite:userList')
 
@@ -577,12 +577,12 @@ def DeleteUser(request, pk):
 
 	toDelete = User.objects.get(pk=pk)
 
-	# LogEntry.objects.log_action(
-	# 	user_id=request.user.id,
-	# 	content_type_id=ContentType.objects.get_for_model(toDelete).pk,
-	# 	object_id=toDelete.donationno,
-	# 	object_repr=unicode(toDelete.donationno),
-	# 	action_flag=DELETION)
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(toDelete).pk,
+		object_id=toDelete.pk,
+		object_repr=unicode(toDelete.username),
+		action_flag=DELETION)
 
 	toDelete.delete()
 	

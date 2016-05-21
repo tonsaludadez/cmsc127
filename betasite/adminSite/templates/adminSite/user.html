@@ -1,6 +1,6 @@
 {% extends 'adminSite/base.html' %}
 {% load staticfiles %}
-{% block title %}Beta University Admin: Add User{% endblock %}
+{% block title %}Beta University Admin: Edit User{% endblock %}
 
 {% block style %}{% endblock %}
 
@@ -10,7 +10,7 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="column">
-					<h2>Add New User</h2>
+					<h2>Edit User: {{ user.username }}</h2>
 				</div>
 			</div>
 			<div class="row">
@@ -27,29 +27,14 @@
 					</div>
 					<form class="ui form" action="{% url 'adminSite:newUser' %}" method="post" id="userForm">
 						{% csrf_token %}
-						<div class="three wide field">
+<!-- 						<div class="three wide field">
 							<label>Username*</label>
 							<input type="text" placeholder="Username*" name="username" class="required">
 						</div>
 
 						<div class="three wide field">
-							<label>Last Name</label>
-							<input type="text" placeholder="Last Name" name="last_name">
-						</div>
-
-						<div class="three wide field">
-							<label>First Name</label>
-							<input type="text" placeholder="First Name" name="first_name">
-						</div>
-
-						<div class="three wide field">
-							<label>Email</label>
-							<input type="text" placeholder="example123@yahoo.com" name="email">
-						</div>
-
-						<div class="three wide field">
 							<label>Password*</label>
-							<input type="password" placeholder="Password*" name="password" class="required" id="password">
+							<input type="password" placeholder="Password*" name="password" class="required" id="password" value="{{ user.password }}">
 						</div>
 
 						<div class="three wide field">
@@ -58,6 +43,20 @@
 							<div class="ui pointing red basic label hidden" id="perror">
 						      Passwords doesn't match
 						    </div>
+						</div> -->
+						<div class="three wide field">
+							<label>Last Name</label>
+							<input type="text" placeholder="Last Name" name="last_name" id="last_name" value={{ user.last_name }}>
+						</div>
+
+						<div class="three wide field">
+							<label>First Name</label>
+							<input type="text" placeholder="First Name" name="first_name" id="first_name" value={{ user.first_name }}>
+						</div>
+
+						<div class="three wide field">
+							<label>Email</label>
+							<input type="text" placeholder="example123@yahoo.com" name="email" id="email" value={{ user.email }}>
 						</div>
 						
 						<div class="three wide field">
@@ -73,7 +72,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="ui button primary" tabindex="0" id="addButton">Add User</div>
+						<div class="ui button primary" tabindex="0" id="editButton">Edit User</div>
 						<div class="ui primary button" id="restoreDropdown">Restore All Dropdowns</div>
 					</form>
 				</div>
@@ -88,7 +87,7 @@
 		$('.close').click(function() {
 			$(this).closest('.message').transition('fade');
 		});
-		$('#addButton').click(function() {
+		$('#editButton').click(function() {
 			var valid = true;
 			$('.required').each(function() {
 				if($(this).val()==''){

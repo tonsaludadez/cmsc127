@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'^users/$',views.UserListView.as_view(), name='userList'),
     url(r'^users/addUser$',views.AddUserView.as_view(), name='addUser'),
     url(r'^users/submit/$',views.AddUserForm, name='newUser'),
-     url(r'^users/delete/(?P<pk>[0-9]+)$',views.DeleteUser, name='deleteUser'),
+    url(r'^users/delete/(?P<pk>[0-9]+)$',views.DeleteUser, name='deleteUser'),
+    url(r'^users/(?P<pk>[0-9]+)$',views.UserView.as_view(), name='users'),
 ]

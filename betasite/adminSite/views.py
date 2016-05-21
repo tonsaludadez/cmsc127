@@ -235,6 +235,26 @@ class ClassView(LoginRequiredMixin, DetailView):
 		
 		return context
 
+class UserView(LoginRequiredMixin, TemplateView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:userList'
+	template_name = 'adminSite/user.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(UserView, self).get_context_data(**kwargs)
+		pk = self.kwargs['pk']
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+		context['user'] = User.objects.get(pk=pk)
+		context['groups'] = Group.objects.all()
+		
+		return context
+
+	def get(self, request, *args, **kwargs):
+		if request.user.groups.all().exists():
+			return redirect('adminSite:adminHome')
+		return super(UserView, self).get(request, *args, **kwargs)
+
 class MonthlyReportGenerator(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:monthlyReportGenerator'
@@ -365,8 +385,11 @@ def AddUserForm(request):
 
 	username = request.POST['username']
 	password = request.POST['password']
+	last_name = request.POST['last_name']
+	first_name = request.POST['first_name']
+	email = request.POST['email']
 	groups = Group.objects.get(name=request.POST['groups'])
-	newUser = User(username=username)
+	newUser = User(username=username, last_name=last_name, first_name=first_name,email=email)
 	newUser.set_password(password)
 	newUser.save()
 
@@ -607,6 +630,15 @@ def ModifyCoordinator(request):
 	class_year.save();
 
 	return redirect('adminSite:classesList')
+
+# @login_required(login_url='mainSite:home')
+# def ModifyUser(request):
+# 	if request.user.groups.all().exists():
+# 		return redirect('adminSite:adminHome')
+
+# 	pk = request.pk
+# 	last_name = request.POST['last_name']
+
 
 @login_required(login_url='mainSite:home')
 def ModifyDonor(request):

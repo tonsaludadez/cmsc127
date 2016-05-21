@@ -340,8 +340,8 @@ def AddUserForm(request):
 	username = request.POST['username']
 	password = request.POST['password']
 	groups = Group.objects.get(name=request.POST['groups'])
-	newUser = User(username=username, password=password)
-	
+	newUser = User(username=username)
+	newUser.set_password(password)
 	newUser.save()
 
 	groups.user_set.add(newUser)

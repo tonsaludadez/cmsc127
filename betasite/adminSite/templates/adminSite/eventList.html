@@ -22,7 +22,9 @@
 				      <th>Event ID</th>
 				      <th>Event Name</th>
 				      <th>Event Date</th>
+				      {% if not is_not_authorized %}
 				      <th>Delete</th>
+				      {% endif %}
 				    </tr>
 				  </thead>
 				  <tbody>
@@ -31,9 +33,11 @@
 					      <td><a href="{% url 'adminSite:event' event.eventid %}">{{ event.eventid }}</a></td>
 					      <td>{{ event.event_name }}</td>
 					      <td>{{ event.event_date }}</td>
+					      {% if not is_not_authorized %}
 					      <td>
 								<a href="{% url 'adminSite:deleteEvent' event.eventid %}"><i class="trash icon"></i></a>
 						  </td>
+						  {% endif %}
 					    </tr>
 					{% endfor %}
 				  </tbody>

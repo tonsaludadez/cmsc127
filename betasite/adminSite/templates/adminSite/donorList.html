@@ -29,7 +29,9 @@
 					      <th>Donor ID</th>
 					      <th>Donor Name</th>
 					      <th>Date Last Payed</th>
+					      {% if not is_not_authorized %}
 					      <th>Delete</th>
+					      {% endif %}
 					    </tr>
 					  </thead>
 					  <tbody>
@@ -38,9 +40,11 @@
 						      <td><a href="{% url 'adminSite:donor' donor.donorid %}">{{ donor.donorid }}</a></td>
 						      <td>{{ donor.lname }}, {{ donor.fname }} {{ donor.mname }}</td>
 						      <td>{{ donor.transactions.last.date_paid }}</td>
+						      {% if not is_not_authorized %}
 						      <td>
 								<a href="{% url 'adminSite:deleteDonor' donor.donorid %}"><i class="trash icon"></i></a>
 						      </td>
+						      {% endif %}
 						    </tr>
 					    {% endfor %}
 					  </tbody>

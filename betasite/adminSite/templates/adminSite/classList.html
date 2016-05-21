@@ -21,7 +21,9 @@
 					    <tr>
 					      <th>Class Year</th>
 					      <th>Class Coordinator</th>
+					      {% if not is_not_authorized %}
 					      <th>Delete</th>
+					      {% endif %}
 					    </tr>
 					  </thead>
 					  <tbody>
@@ -29,9 +31,11 @@
 					    <tr>
 					      <td><a href="{% url 'adminSite:class' class.classyear%}">{{ class.classyear }}</a></td>
 					      <td>{{ class.coordinator }}</td>
+					      {% if not is_not_authorized %}
 					      <td>
 								<a href="{% url 'adminSite:deleteClass' class.classyear %}"><i class="trash icon"></i></a>
 						  </td>
+						  {% endif %}
 					    </tr>
 					    {% endfor %}
 					  </tbody>

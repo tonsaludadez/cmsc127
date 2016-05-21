@@ -33,7 +33,11 @@
 					  		{{ group.name }}
 					  		{% endfor %}
 					  		</td>
-					  		<td><a href="{% url 'adminSite:deleteUser' user.pk %}"><i class="trash icon"></i></a></td>
+					  		<td>
+					  		{% if not request.user == user %}
+					  		<a href="{% url 'adminSite:deleteUser' user.pk %}"><i class="trash icon"></i></a>
+					  		{% endif %}
+					  		</td>
 					  	</tr>
 					  	{% endfor %}
 					  </tbody>

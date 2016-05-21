@@ -115,6 +115,11 @@ class AddDonorView(LoginRequiredMixin, TemplateView):
 
 		return context
 
+	def get(self, request, *args, **kwargs):
+		if request.user.groups.filter(name='Coordinator').exists():
+			return redirect('adminSite:adminHome')
+		return super(AddDonorView, self).get(request, *args, **kwargs)
+
 class AddUserView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:addUser'
@@ -147,6 +152,11 @@ class EditDonorView(LoginRequiredMixin, TemplateView):
 
 		return context
 
+	def get(self, request, *args, **kwargs):
+		if request.user.groups.filter(name='Coordinator').exists():
+			return redirect('adminSite:adminHome')
+		return super(EditDonorView, self).get(request, *args, **kwargs)
+
 class AddEventView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:addEvent'
@@ -157,6 +167,11 @@ class AddEventView(LoginRequiredMixin, TemplateView):
 		context['is_admin'] = not self.request.user.groups.all().exists()
 
 		return context
+
+	def get(self, request, *args, **kwargs):
+		if request.user.groups.filter(name='Coordinator').exists():
+			return redirect('adminSite:adminHome')
+		return super(AddEventView, self).get(request, *args, **kwargs)
 
 class AddDonationView(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
@@ -170,6 +185,11 @@ class AddDonationView(LoginRequiredMixin, TemplateView):
 		context['is_admin'] = not self.request.user.groups.all().exists()
 
 		return context
+
+	def get(self, request, *args, **kwargs):
+		if request.user.groups.filter(name='Coordinator').exists():
+			return redirect('adminSite:adminHome')
+		return super(AddDonationView, self).get(request, *args, **kwargs)
 
 class DonorView(LoginRequiredMixin, DetailView):
 	login_url = 'mainSite:home'
@@ -283,6 +303,9 @@ def EventReportForm(request):
 
 @login_required(redirect_field_name='my_redirect_field')
 def AddClassForm(request):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:adminHome')
+		
 	classyear = request.POST['classyear']
 	newClass = Class(classyear=classyear)
 	
@@ -305,6 +328,9 @@ def AddClassForm(request):
 
 @login_required(login_url='mainSite:home')
 def AddDonorForm(request):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:adminHome')
+
 	fname = request.POST['fname']
 	mname = request.POST['mname']
 	lname = request.POST['lname']
@@ -357,6 +383,9 @@ def AddUserForm(request):
 
 @login_required(login_url='mainSite:home')
 def AddDonationForm(request):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:adminHome')
+
 	amount = request.POST['amount']
 	pledge_date = request.POST['pledge_date']
 	donorid = Donor.objects.get(donorid=request.POST['donorid'])
@@ -386,6 +415,9 @@ def AddDonationForm(request):
 
 @login_required(login_url='mainSite:home')
 def AddEventForm(request):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:adminHome')
+
 	event_name = request.POST['event_name']
 	event_date = request.POST['event_date']
 	newEvent = Events(event_name=event_name, event_date=event_date)
@@ -410,6 +442,9 @@ def AddEventForm(request):
 
 @login_required(login_url='mainSite:home')
 def AddTransaction(request):
+	if request.user.groups.filter(name='Coordinator').exists():
+		return redirect('adminSite:adminHome')
+
 	donationno = Donation.objects.get(donationno=request.POST['donationno'])
 	donorid = Donor.objects.get(donorid=request.POST['donorid'])
 	amount_paid = request.POST['payment']

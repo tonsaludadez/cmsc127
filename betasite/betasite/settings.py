@@ -88,9 +88,25 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'beta_university',
         'USER': 'postgres',
-        'PASSWORD': 'trademark102696',
+        'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '',
+    },
+
+    'moderator': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'beta_university',
+        'USER': 'moderator',
+        'PASSWORD': 'moderator',
+        'HOST': 'localhost',
+    },
+
+    'coordinator': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'beta_university',
+        'USER': 'coordinator',
+        'PASSWORD': 'coordinator',
+        'HOST': 'localhost',
     }
 }
 

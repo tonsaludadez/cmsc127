@@ -485,8 +485,9 @@ def AddTransaction(request):
 	LogEntry.objects.log_action(
 		user_id=request.user.id,
 		content_type_id=ContentType.objects.get_for_model(newTransaction).pk,
-		object_id=newTransaction.id,
+		object_id=newTransaction,
 		object_repr=unicode(newTransaction),
+		change_message='Added New Payment',
 		action_flag=ADDITION)
 
 	return redirect('adminSite:donationList')

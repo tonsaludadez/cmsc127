@@ -16,7 +16,8 @@
 				<br>
 				<br>
 				<div class="ui centered grid">
-					<form class="ui form">
+					<form class="ui form" action="{% url 'adminSite:monthlyReportSubmit' %}" method="post">
+					{% csrf_token %}
 						 <label class="ui center aligned header">Input Month and Year</label>
 					      <div class="two fields">
 					        <div class="field">
@@ -37,13 +38,9 @@
 					          </select>
 					        </div>
 					        <div class="fluid field">
-					          <input type="text" name="Year" minlength="4" maxlength="4" placeholder="Year">
+					          <input type="text" name="year" minlength="4" maxlength="4" placeholder="Year">
 					        </div>
 					      </div>
-					    
-
-
-						
 						<br>
 						<div class="field" id="generate">
 							<button class="massive ui green button">Generate</button>
@@ -56,4 +53,9 @@
 {% endblock %}
 
 {% block scripts %}
+	<script type="text/javascript">
+		$('#generate').click(function(){
+			$('#form').submit();
+		});
+	</script>
 {% endblock %}

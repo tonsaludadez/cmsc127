@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.views.generic import  CreateView, DetailView, ListView, RedirectView, TemplateView
-from django.views.generic.dates import YearArchiveView
+from django.views.generic.dates import YearArchiveView, MonthArchiveView
 
 from adminSite.models import Class, Donation, Donor, Events, EventDonation, Transaction
 
@@ -267,10 +267,27 @@ class MonthlyReportGenerator(LoginRequiredMixin, TemplateView):
 		
 		return context
 
-class MonthlyReport(LoginRequiredMixin, TemplateView):
+class MonthlyReport(LoginRequiredMixin, MonthArchiveView):
+	queryset = Transaction.objects.all()
+	date_field = "date_paid"
+	allow_future = False
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:monthlyReport'
 	template_name = 'adminSite/monthlyReport.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(MonthlyReport, self).get_context_data(**kwargs)
+		sum_paid = 0
+		sum_pledge = 0
+		for transaction in context['object_list']:
+			sum_paid = sum_paid + transaction.amount_paid
+			sum_pledge = sum_pledge + transaction.donationno.amount
+
+		context['sum_paid'] = sum_paid
+		context['sum_pledge'] = sum_pledge
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
 
 class AnnualReportGenerator(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
@@ -284,6 +301,7 @@ class AnnualReportGenerator(LoginRequiredMixin, TemplateView):
 		return context
 
 class AnnualReport(LoginRequiredMixin, YearArchiveView):
+	login_url = 'mainSite:home'
 	queryset = Transaction.objects.all()
 	date_field = "date_paid"
 	make_object_list = True
@@ -691,7 +709,6 @@ def ModifyUser(request):
 
 	return redirect('adminSite:userList')
 
-
 @login_required(login_url='mainSite:home')
 def ModifyDonor(request):
 	if request.user.groups.filter(name='Coordinator').exists():
@@ -725,6 +742,10 @@ def ModifyDonor(request):
 
 	return redirect('adminSite:donorList')
 
+@login_required(login_url='mainSite:home')
+def redirectMonthlyReport(request):
+	return redirect('adminSite:monthlyReport', request.POST['year'], request.POST['month'])
+
+@login_required(login_url='mainSite:home')
 def redirectToAnnualYear(request):
-	
 	return redirect('adminSite:annualReport', request.POST['year'])

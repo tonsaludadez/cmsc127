@@ -284,10 +284,27 @@ class AnnualReportGenerator(LoginRequiredMixin, TemplateView):
 		return context
 
 class AnnualReport(LoginRequiredMixin, YearArchiveView):
-	queryset = Donation.objects.all()
-	date_field = "pledge_date"
+	queryset = Transaction.objects.all()
+	date_field = "date_paid"
 	make_object_list = True
 	allow_future = False
+	template_name = 'adminSite/annualReport.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(AnnualReport, self).get_context_data(**kwargs)
+		
+		classes = {}
+
+		for transaction in context['object_list']:
+			if not transaction.donorid.class_field in classes:
+				classes[transaction.donorid.class_field] = transaction.amount_paid
+			else:
+				classes[transaction.donorid.class_field] = classes[transaction.donorid.class_field] + transaction.amount_paid
+
+		context['classes'] = classes
+
+
+		return context
 
 class EventView(LoginRequiredMixin, DetailView):
 	login_url = 'mainSite:home'
@@ -709,3 +726,6 @@ def ModifyDonor(request):
 
 	return redirect('adminSite:donorList')
 
+def redirectToAnnualYear(request):
+	
+	return redirect('adminSite:annualReport', request.POST['year'])

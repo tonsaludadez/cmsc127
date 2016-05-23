@@ -730,13 +730,10 @@ def ModifyDonor(request):
 
 	return redirect('adminSite:donorList')
 
-<<<<<<< HEAD
 @login_required(login_url='mainSite:home')
 def redirectMonthlyReport(request):
 	return redirect('adminSite:monthlyReport', request.POST['year'], request.POST['month'])
 
-=======
+@login_required(login_url='mainSite:home')
 def redirectToAnnualYear(request):
-	
 	return redirect('adminSite:annualReport', request.POST['year'])
->>>>>>> master

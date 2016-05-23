@@ -275,6 +275,20 @@ class MonthlyReport(LoginRequiredMixin, MonthArchiveView):
 	redirect_field_name = 'adminSite:monthlyReport'
 	template_name = 'adminSite/monthlyReport.html'
 
+	def get_context_data(self, **kwargs):
+		context = super(MonthlyReport, self).get_context_data(**kwargs)
+		sum_paid = 0
+		sum_pledge = 0
+		for transaction in context['object_list']:
+			sum_paid = sum_paid + transaction.amount_paid
+			sum_pledge = sum_pledge + transaction.donationno.amount
+
+		context['sum_paid'] = sum_paid
+		context['sum_pledge'] = sum_pledge
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
+
 class AnnualReportGenerator(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:annualReportGenerator'
@@ -695,7 +709,6 @@ def ModifyUser(request):
 		action_flag=CHANGE)
 
 	return redirect('adminSite:userList')
-
 
 @login_required(login_url='mainSite:home')
 def ModifyDonor(request):

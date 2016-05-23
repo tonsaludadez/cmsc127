@@ -1,5 +1,6 @@
 from django.db.models import Sum
 from django import template
+import calendar
 
 register = template.Library()
 
@@ -40,3 +41,7 @@ def totalGiftsDonation(value):
 			sum = sum + payment.amount_paid
 			
 	return sum
+
+@register.filter(name='month_name')
+def month_name(month_number):
+	return calendar.month_name[month_number]

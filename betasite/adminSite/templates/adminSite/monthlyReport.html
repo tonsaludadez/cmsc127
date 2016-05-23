@@ -1,5 +1,6 @@
 {% extends 'adminSite/base.html' %}
 {% load staticfiles %}
+{% load sum %}
 {% block title %}Beta University Admin: Monthly Report{% endblock %}
 
 {% block style %}{% endblock %}
@@ -10,7 +11,7 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="column">
-					<h2>Monthly Report</h2>
+					<h2>Monthly Report: {{ date_list.0.month|month_name }} {{ date_list.0.year }}</h2>
 				</div>
 			</div>
 			<div class="row">
@@ -19,12 +20,15 @@
 					<table class="ui single line table">
 					  <thead>
 					    <tr>
+					    	<th></th>
 					    	<th>Pledges</th>
 					    	<th>Gifts</th>
 					    </tr>
 					  </thead>
 					  <tbody>
-						  <td></td>				  	
+						  <td>Total</td>		
+						  <td>{{ sum_pledge }} PHP</td>
+						  <td>{{ sum_paid }} PHP</td>		  	
 					  </tbody>
 					   <tfoot></tfoot>
 					</table>

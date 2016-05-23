@@ -110,7 +110,8 @@
 			$('.ui.modal').modal('show')
 		});
 		$('#save').click(function() {
-			$('#changeForm').submit();
+			if($('#donor').val() != undefined)
+				$('#changeForm').submit();
 		});
 	</script>
 {% endblock %}

@@ -448,7 +448,12 @@ def AddDonorForm(request):
 	email = request.POST['email']
 	address = request.POST['address']
 	class_field = Class.objects.get(classyear=request.POST['class_field'])
-	newDonor = Donor(fname=fname, mname=mname, lname=lname, contactno=contactno, creditno=creditno, email=email, class_field=class_field, address=address)
+	if request.POST['affiliation']:
+		affiliation = request.POST['affiliation']
+		affiliation = Donor.objects.get(donorid=affiliation)
+		newDonor = Donor(fname=fname, mname=mname, lname=lname, contactno=contactno, creditno=creditno, email=email, class_field=class_field, address=address, donor_affiliation=affiliation)
+	else:
+		newDonor = Donor(fname=fname, mname=mname, lname=lname, contactno=contactno, creditno=creditno, email=email, class_field=class_field, address=address)
 	
 	try:
 		if request.user.groups.filter(name='Coordinator').exists():
@@ -771,6 +776,13 @@ def ModifyDonor(request):
 	donor.creditno = creditno
 	donor.email = email
 	donor.class_field = class_field
+
+	if request.POST['affiliation']:
+		affiliation = request.POST['affiliation']
+		affiliation = Donor.objects.get(donorid=affiliation)
+
+		donor.donor_affiliation = affiliation
+	
 
 	LogEntry.objects.log_action(
 		user_id=request.user.id,

@@ -15,8 +15,11 @@
 				<table class="ui sortable single line table">
 				  <thead>
 				    <tr>
-				    	<td>User</td>
-				    	<td>Action</td>
+				    	<th>User</th>
+				    	<th>Action</th>
+				    	<th>Message</th>
+				    	<th>Date</th>
+				    	<th>Time</th>
 				    </tr>
 				  </thead>
 				  <tbody>
@@ -24,6 +27,9 @@
 				    <tr>
 				    	<td>{{ log.user }}</td>
 				    	<td>{{ log }}</td>
+				    	<td>{{ log.change_message }}</td>
+				    	<td>{{ log.action_time.date }}</td>
+				    	<td>{{ log.action_time.time }}</td>
 					</tr>
 					{% endfor %}
 				  </tbody>

@@ -31,3 +31,12 @@ def totalGifts(value):
 			sum = sum + payment.amount_paid
 
 	return sum
+
+@register.filter(name='totalGiftsDonation')
+def totalGiftsDonation(value):
+	sum = 0
+	for item in value:
+		for payment in item.transactions.all():
+			sum = sum + payment.amount_paid
+			
+	return sum

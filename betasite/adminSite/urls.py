@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^class/modify/$',views.ModifyCoordinator, name='modifyCoor'),
     url(r'^report/monthly/$',views.MonthlyReportGenerator.as_view(), name='monthlyReportGenerator'),
     url(r'^report/annual/$',views.AnnualReportGenerator.as_view(), name='annualReportGenerator'),
+    url(r'^report/annual/(?P<year>[0-9]{4})/$', AnnualReport.as_view(), name="annualReport"),
     url(r'^report/event/$',views.EventReportGenerator.as_view(), name='eventReportGenerator'),
     url(r'^report/event/(?P<pk>[0-9]+)/$',views.EventReport.as_view(), name='eventReport'),
     url(r'^report/event/submit/$',views.EventReportForm, name='eventReportForm'),
@@ -39,4 +40,5 @@ urlpatterns = [
     url(r'^users/submit/$',views.AddUserForm, name='newUser'),
     url(r'^users/delete/(?P<pk>[0-9]+)$',views.DeleteUser, name='deleteUser'),
     url(r'^users/(?P<pk>[0-9]+)$',views.UserView.as_view(), name='users'),
+    url(r'^users/editUser/submit$',views.ModifyUser, name='editUser'),
 ]

@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.views.generic import  CreateView, DetailView, ListView, RedirectView, TemplateView
+from django.views.generic.dates import YearArchiveView
 
 from adminSite.models import Class, Donation, Donor, Events, EventDonation, Transaction
 
@@ -260,6 +261,12 @@ class MonthlyReportGenerator(LoginRequiredMixin, TemplateView):
 	redirect_field_name = 'adminSite:monthlyReportGenerator'
 	template_name = 'adminSite/monthlyReportGenerator.html'
 
+	def get_context_data(self, **kwargs):
+		context = super(MonthlyReportGenerator, self).get_context_data(**kwargs)
+		context['is_admin'] = not self.request.user.groups.all().exists()
+		
+		return context
+
 class MonthlyReport(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:monthlyReport'
@@ -270,10 +277,17 @@ class AnnualReportGenerator(LoginRequiredMixin, TemplateView):
 	redirect_field_name = 'adminSite:annualReportGenerator'
 	template_name = 'adminSite/annualReportGenerator.html'
 
-class AnnualReport(LoginRequiredMixin, TemplateView):
-	login_url = 'mainSite:home'
-	redirect_field_name = 'adminSite:annualReport'
-	template_name = 'adminSite/annualReport.html'
+	def get_context_data(self, **kwargs):
+		context = super(AnnualReportGenerator, self).get_context_data(**kwargs)
+		context['is_admin'] = not self.request.user.groups.all().exists()
+		
+		return context
+
+class AnnualReport(LoginRequiredMixin, YearArchiveView):
+	queryset = Donation.objects.all()
+	date_field = "pledge_date"
+	make_object_list = True
+	allow_future = False
 
 class EventView(LoginRequiredMixin, DetailView):
 	login_url = 'mainSite:home'
@@ -632,13 +646,34 @@ def ModifyCoordinator(request):
 
 	return redirect('adminSite:classesList')
 
-# @login_required(login_url='mainSite:home')
-# def ModifyUser(request):
-# 	if request.user.groups.all().exists():
-# 		return redirect('adminSite:adminHome')
+@login_required(login_url='mainSite:home')
+def ModifyUser(request):
+	if request.user.groups.all().exists():
+		return redirect('adminSite:adminHome')
 
-# 	pk = request.pk
-# 	last_name = request.POST['last_name']
+	pk = request.POST['pk']
+	last_name = request.POST['last_name']
+	first_name = request.POST['first_name']
+	email = request.POST['email']
+	groups = Group.objects.get(name=request.POST['groups'])
+	user = User.objects.get(pk=pk)
+	old_group = user.groups.all()[0]
+	user.last_name = last_name
+	user.first_name = first_name
+	user.email = email
+	user.save()
+
+	old_group.user_set.remove(user)
+	groups.user_set.add(user)
+
+	LogEntry.objects.log_action(
+		user_id=request.user.id,
+		content_type_id=ContentType.objects.get_for_model(user).pk,
+		object_id=user.pk,
+		object_repr=unicode(user),
+		action_flag=CHANGE)
+
+	return redirect('adminSite:userList')
 
 
 @login_required(login_url='mainSite:home')

@@ -19,10 +19,10 @@
 					<form class="ui form">
 						<div class="fluid field">
 							<label class="ui center aligned header">Input Year</label>
-							<input type="text" placeholder="Year" minlength="4" maxlength="4" placeholder="Year">
+							<input type="text" placeholder="Year" minlength="4" maxlength="4" name="year">
 
 						</div>
-						<div class="field">
+						<div class="field" id="generate">
 							<button class="massive ui green button">Generate</button>
 						</div>
 					</form>
@@ -32,4 +32,10 @@
 	</div>
 {% endblock %}
 
-{% block scripts %}{% endblock %}
+{% block scripts %}
+	<script type="text/javascript">
+		$('#generate').click(function(){
+			$('#form').submit();
+		});
+	</script>
+{% endblock %}

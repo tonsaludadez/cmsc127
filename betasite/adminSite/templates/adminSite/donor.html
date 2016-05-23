@@ -11,7 +11,30 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="ui medium bordered image column">
+					{% with total_payment=donor.donations.all|totalGiftsDonation %}
+					{% if total_payment <= 100 %}
 					<img src="{% static 'adminSite/img/dp.jpg' %}">
+					{% elif total_payment <= 1000 %}
+					<img src="{% static 'adminSite/img/over 100 - copper.png' %}">
+					{% elif total_payment <= 10000 %}
+					<img src="{% static 'adminSite/img/over 1,000 - brass.png' %}">
+					{% elif total_payment <= 15000 %}
+					<img src="{% static 'adminSite/img/over 10,000 - silver.png' %}">
+					{% elif total_payment <= 20000 %}
+					<img src="{% static 'adminSite/img/over 15,000 - cobalt.png' %}">
+					{% elif total_payment <= 25000 %}
+					<img src="{% static 'adminSite/img/over 20,000 - gold.png' %}">
+					{% elif total_payment <= 30000 %}
+					<img src="{% static 'adminSite/img/over 25,000 - platinum.png' %}">
+					{% elif total_payment <= 40000 %}
+					<img src="{% static 'adminSite/img/over 30,000 - titanium.png' %}">
+					{% elif total_payment <= 50000 %}
+					<img src="{% static 'adminSite/img/over 40,000 - diamond.png' %}">
+					{% else %}
+					<img src="{% static 'adminSite/img/over 50,000 - president.PNG' %}">
+
+					{% endif %}
+					{% endwith %}
 				</div>
 				<div class="column">
 					<h1>{{ donor.fname }} {{ donor.mname }}  {{ donor.lname }}</h1>

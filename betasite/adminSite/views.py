@@ -256,6 +256,46 @@ class UserView(LoginRequiredMixin, TemplateView):
 			return redirect('adminSite:adminHome')
 		return super(UserView, self).get(request, *args, **kwargs)
 
+class DuePaymentsGenerator(LoginRequiredMixin, TemplateView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:duePaymentsGenerator'
+	template_name = 'adminSite/duePaymentsGenerator.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(DuePaymentsGenerator, self).get_context_data(**kwargs)
+		context['is_admin'] = not self.request.user.groups.all().exists()
+		
+		return context
+
+class DuePayments(LoginRequiredMixin, MonthArchiveView):
+	queryset = Transaction.objects.all()
+	date_field = "date_paid"
+	allow_future = False
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:duePayments'
+	template_name = 'adminSite/duePayments.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(DuePayments, self).get_context_data(**kwargs)
+
+		donors = {}
+		pledges = {}
+
+		for transaction in context['object_list']:
+			if not transaction.donationno in donors:
+				donors[transaction.donationno] = transaction.amount_paid
+			else:
+				donors[transaction.donationno] = donors[transaction.donationno] + transaction.amount_paid
+
+		for transaction in context['object_list']:
+			pledges[transaction.donationno] = transaction.donationno.amount
+
+		context['donors'] = donors
+		context['pledges'] = pledges
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
+
 class MonthlyReportGenerator(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:monthlyReportGenerator'
@@ -320,6 +360,7 @@ class AnnualReport(LoginRequiredMixin, YearArchiveView):
 				classes[transaction.donorid.class_field] = classes[transaction.donorid.class_field] + transaction.amount_paid
 
 		context['classes'] = classes
+		context['is_admin'] = not self.request.user.groups.all().exists()
 
 		return context
 
@@ -749,3 +790,7 @@ def redirectMonthlyReport(request):
 @login_required(login_url='mainSite:home')
 def redirectToAnnualYear(request):
 	return redirect('adminSite:annualReport', request.POST['year'])
+
+@login_required(login_url='mainSite:home')
+def redirectDuePayments(request):
+	return redirect('adminSite:duePayments', request.POST['year'], request.POST['month'])

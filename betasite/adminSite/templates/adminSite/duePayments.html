@@ -1,0 +1,82 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% load sum %}
+{% block title %}Beta University Admin: Due Payments{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+	<div class="ui five column grid">
+		<div class="row"></div>
+		<div class="row">
+			<div class="column"></div>
+			<div class="column">
+				<h2>Donations</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="column"></div>
+			<div class="twelve wide column">
+				<table class="ui sortable single line table">
+				  <thead>
+				    <tr>
+				      <th>Donation ID</th>
+				      <th>Donor ID</th>
+				      <th>Pledge Amount</th>
+				      <th>Amount Payed</th>
+				      <th>Balance</th>
+				      <th>Date Last Payed</th>
+				      {% if not is_not_authorized %}
+				      <th>Delete</th>
+				      {% endif %}
+				    </tr>
+				  </thead>
+				  <tbody>
+				    {% for key, value in donors.items %}
+				    {% if value < plegdes.items.key %}
+				    <tr>
+				    	<td>{{ key }}</td>
+				    	<td>{{ value }}</td>
+					    {% if not is_not_authorized %}
+					    <td>
+								<a href="#"><i class="trash icon"></i></a>
+						</td>
+						{% endif %}
+					</tr>
+					{% endif %}
+				    {% endfor %}
+				  </tbody>
+				   <tfoot>
+				    <tr>
+				    	<th colspan="10">
+				    		{% if not is_not_authorized %}
+				    		<div class="ui left floated small primary labeled icon button" id="addDonation">
+					        	<i class="dollar icon"></i> Add Donation
+					        </div>
+					        {% endif %}
+					      	<div class="ui right floated pagination menu">
+					        	<a class="icon item">
+					          		<i class="left chevron icon"></i>
+						       	</a>
+						    	<div class="item">1 of 1</div>
+					        	<a class="icon item">
+					         		<i class="right chevron icon"></i>
+					        	</a>
+					      	</div>
+					    </th>
+				  	</tr>
+				  </tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		$('#addDonation').click(function() {
+			location.href = "{% url 'adminSite:addDonation' %}"
+		});
+		$('.sortable.table').tablesort();
+	</script>
+{% endblock %}

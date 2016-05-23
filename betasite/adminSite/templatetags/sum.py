@@ -45,3 +45,7 @@ def totalGiftsDonation(value):
 @register.filter(name='month_name')
 def month_name(month_number):
 	return calendar.month_name[month_number]
+
+@register.filter(name='get_percent')
+def get_percent(num1, num2):
+	return (num1/num2)*100

@@ -1,0 +1,61 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Generate Due Payment{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+	<div class="ui grid">
+		<div class="row"></div>
+		<div class="row"></div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="three wide column"></div>
+			<div class="twelve wide column">
+				<h1 class="ui center aligned header">Generate Due Payment</h1>
+				<br>
+				<br>
+				<div class="ui centered grid">
+					<form class="ui form" action="{% url 'adminSite:duePaymentsSubmit' %}" method="post">
+					{% csrf_token %}
+						 <label class="ui center aligned header">Input Month and Year</label>
+					      <div class="two fields">
+					        <div class="field">
+					          <select class="ui fluid search dropdown" name="month">
+					            <option value="">Month</option>
+					            <option value="1">January</option>
+					            <option value="2">February</option>
+					            <option value="3">March</option>	
+					            <option value="4">April</option>
+					            <option value="5">May</option>
+					            <option value="6">June</option>
+					            <option value="7">July</option>
+					            <option value="8">August</option>
+					            <option value="9">September</option>
+					            <option value="10">October</option>
+					            <option value="11">November</option>
+					            <option value="12">December</option>
+					          </select>
+					        </div>
+					        <div class="fluid field">
+					          <input type="text" name="year" minlength="4" maxlength="4" placeholder="Year">
+					        </div>
+					      </div>
+						<br>
+						<div class="field" id="generate">
+							<button class="massive ui green button">Generate</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		$('#generate').click(function(){
+			$('#form').submit();
+		});
+	</script>
+{% endblock %}

@@ -23,12 +23,14 @@
 					    	<th></th>
 					    	<th>Pledges</th>
 					    	<th>Gifts</th>
+					    	<th>Percentage Paid</th>
 					    </tr>
 					  </thead>
 					  <tbody>
 						  <td>Total</td>		
 						  <td>{{ sum_pledge }} PHP</td>
-						  <td>{{ sum_paid }} PHP</td>		  	
+						  <td>{{ sum_paid }} PHP</td>	
+						  <td>{{ sum_paid|get_percent:sum_pledge}} %</td>	  	
 					  </tbody>
 					   <tfoot></tfoot>
 					</table>

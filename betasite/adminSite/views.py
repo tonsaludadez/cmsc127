@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum
 from django.shortcuts import redirect, render
 from django.views.generic import  CreateView, DetailView, ListView, RedirectView, TemplateView
-from django.views.generic.dates import YearArchiveView
+from django.views.generic.dates import YearArchiveView, MonthArchiveView
 
 from adminSite.models import Class, Donation, Donor, Events, EventDonation, Transaction
 
@@ -267,7 +267,10 @@ class MonthlyReportGenerator(LoginRequiredMixin, TemplateView):
 		
 		return context
 
-class MonthlyReport(LoginRequiredMixin, TemplateView):
+class MonthlyReport(LoginRequiredMixin, MonthArchiveView):
+	queryset = Transaction.objects.all()
+	date_field = "date_paid"
+	allow_future = False
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:monthlyReport'
 	template_name = 'adminSite/monthlyReport.html'
@@ -284,6 +287,7 @@ class AnnualReportGenerator(LoginRequiredMixin, TemplateView):
 		return context
 
 class AnnualReport(LoginRequiredMixin, YearArchiveView):
+	login_url = 'mainSite:home'
 	queryset = Donation.objects.all()
 	date_field = "pledge_date"
 	make_object_list = True
@@ -708,4 +712,8 @@ def ModifyDonor(request):
 	donor.save()
 
 	return redirect('adminSite:donorList')
+
+@login_required(login_url='mainSite:home')
+def redirectMonthlyReport(request):
+	return redirect('adminSite:monthlyReport', request.POST['year'], request.POST['month'])
 

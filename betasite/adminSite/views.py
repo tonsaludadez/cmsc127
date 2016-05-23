@@ -303,7 +303,6 @@ class AnnualReport(LoginRequiredMixin, YearArchiveView):
 
 		context['classes'] = classes
 
-
 		return context
 
 class EventView(LoginRequiredMixin, DetailView):

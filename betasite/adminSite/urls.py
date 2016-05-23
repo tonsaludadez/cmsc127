@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^report/monthly/submit/$', views.redirectMonthlyReport, name="monthlyReportSubmit"),
     url(r'^report/annual/$', views.AnnualReportGenerator.as_view(), name='annualReportGenerator'),
     url(r'^report/annual/(?P<year>[0-9]{4})/$', views.AnnualReport.as_view(), name="annualReport"),
+    url(r'^report/annual/submit/$', views.redirectToAnnualYear, name="annualReportSubmit"),
     url(r'^report/event/$',views.EventReportGenerator.as_view(), name='eventReportGenerator'),
     url(r'^report/event/(?P<pk>[0-9]+)/$',views.EventReport.as_view(), name='eventReport'),
     url(r'^report/event/submit/$',views.EventReportForm, name='eventReportForm'),

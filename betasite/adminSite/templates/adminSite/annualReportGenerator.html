@@ -16,7 +16,8 @@
 				<br>
 				<br>
 				<div class="ui centered grid">
-					<form class="ui form">
+					<form class="ui form" action="{% url 'adminSite:annualReportSubmit' %}" method="post">
+					{% csrf_token %}
 						<div class="fluid field">
 							<label class="ui center aligned header">Input Year</label>
 							<input type="text" placeholder="Year" minlength="4" maxlength="4" name="year">

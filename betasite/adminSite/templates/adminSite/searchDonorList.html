@@ -10,18 +10,8 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="column">
-					<h2>Donors</h2>
+					<h2>Results for: "{{ searched }}"</h2>
 				</div>
-				<form method="get" action="{% url 'adminSite:searchDonor'%}">
-					{% csrf_token %}
-					<div class="ui fluid category search">
-	  					<div class="ui icon input">
-	    					<input class="prompt" type="text" placeholder="Search donor..." name="search">
-	    					<i class="search icon"></i>
-	  					</div>
-	  					<div class="results"></div>
-					</div>
-				</form>
 			</div>
 			<div class="row">
 				<div class="column"></div>
@@ -54,11 +44,6 @@
 					   <tfoot>
 					    <tr>
 					    	<th colspan="10">
-					    		{% if not is_not_authorized %}
-					    		<div class="ui left floated small primary labeled icon button" id="addDonor">
-						        	<i class="user icon"></i> Add New Donor
-						        </div>
-						        {% endif %}
 						      	<div class="ui right floated pagination menu">
 						        	<a class="icon item">
 						          		<i class="left chevron icon"></i>
@@ -79,14 +64,6 @@
 
 {% block scripts %}
 	<script type="text/javascript">
-		var content = [
-		{% for donor in object_list %}
-		{title: '{{ donor.fname }} {{ donor.mname }} {{ donor.lname }}'},
-		{% endfor %}
-		];
-		$('#addDonor').click(function() {
-			location.href = "{% url 'adminSite:addDonor' %}";
-		});
 		$('.sortable.table').tablesort();
 		$('.ui.search')
   			.search({

@@ -13,6 +13,8 @@ from adminSite.models import Class, Donation, Donor, Events, EventDonation, Tran
 
 import datetime
 
+from itertools import chain
+
 class LogoutView(RedirectView):
     url = '/'
 
@@ -430,7 +432,31 @@ class EventReport(LoginRequiredMixin, DetailView):
 		context['eventDonations'] = EventDonation.objects.filter(eventid=kwargs['object'])
 		context['is_admin'] = not self.request.user.groups.all().exists()
 
-		return context	
+		return context
+
+class SearchDonor(LoginRequiredMixin, ListView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:userList'
+	template_name = 'adminSite/searchDonorList.html'
+	model = Donor
+
+	def get_queryset(self):
+		queryset = super(SearchDonor, self).get_queryset()
+		names = self.request.GET['search']
+		names = names.split(' ')
+		toReturn = 0
+		toReturn = []
+		for name in names:
+			fname = queryset.filter(fname__icontains=name)
+			lname = queryset.filter(lname__icontains=name)
+			toReturn = list(chain(fname, lname))
+		return toReturn
+
+	def get_context_data(self, **kwargs):
+		context = super(SearchDonor, self).get_context_data(**kwargs)
+		context['searched'] = self.request.GET['search']
+
+		return context
 
 @login_required(login_url='mainSite:home')
 def EventReportForm(request):

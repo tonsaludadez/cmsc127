@@ -1,0 +1,53 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Generate Coordinator List{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+	<div class="ui grid">
+		<div class="row"></div>
+		<div class="row"></div>
+		<div class="row"></div>
+		<div class="row">
+			<div class="three wide column"></div>
+			<div class="twelve wide column">
+				<h1 class="ui center aligned header">Generate Coordinator List</h1>
+				<br>
+				<br>
+				<div class="ui centered grid">
+					<form class="ui form" action="{% url 'adminSite:coordinatorListSubmit' %}" method="post">
+					{% csrf_token %}
+						<div class="field">
+							<label>Class Year</label>
+						</div>
+						<div class="field">
+							<div class="ui fluid search selection dropdown">
+								<input type="hidden" name="class_field" class="required">
+								<i class="dropdown icon"></i>
+								<div class="default text">Select Class Year</div>
+								<div class="menu">
+								{% for class in classes %}
+									<div class="item" data-value="{{ class.classyear }}">{{ class.classyear }}</div>
+								{% endfor %}
+								</div>
+							</div>
+						</div>
+						<div class="field" id="generate">
+							<button class="massive ui green button">Generate</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+		$('#generate').click(function(){
+			$('#form').submit();
+		});
+	</script>
+{% endblock %}

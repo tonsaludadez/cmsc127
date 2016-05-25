@@ -1,0 +1,74 @@
+{% extends 'adminSite/base.html' %}
+{% load staticfiles %}
+{% block title %}Beta University Admin: Coordinator List {{ class.classyear }}{% endblock %}
+
+{% block style %}{% endblock %}
+
+{% block content %}
+	<div class="ui grid">
+			<div class="row"></div>
+			<div class="row">
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<h1>Class {{ class.classyear }}</h1>
+					<h4>Class Coordinator: {{ class.coordinator }}</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<br>
+					<h2>Donors</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<table class="ui single line table">
+					  <thead>
+					    <tr>
+					      <th>Name</th>
+					      <th>Address</th>
+					      <th>Contact No.</th>
+					      <th>Last Year's Pledge</th>
+					      <th>Last Year's Gift</th>
+					      <th>This Year's Pledge</th>
+					      <th>This Year's Gift</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  	{% for donor in class.donors.all %}
+					    <tr>
+					      <td>{{ donor.lname }}, {{ donor.fname }} {{ donor.mname }}</td>
+					      <td>{{ donor.address }}
+					      <td>{{ donor.contactno }}</td>
+					      <td></td>
+					      <td></td>
+					      <td></td>
+					      <td></td>
+					    </tr>
+					    {% endfor %}
+					  </tbody>
+					   <tfoot>
+					    <tr>
+					    	<th colspan="10">
+						      	<div class="ui right floated pagination menu">
+						        	<a class="icon item">
+						          		<i class="left chevron icon"></i>
+							       	</a>
+							    	<div class="item">1 of 1</div>
+						        	<a class="icon item">
+						         		<i class="right chevron icon"></i>
+						        	</a>
+						      	</div>
+						    </th>
+					  	</tr>
+					  </tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

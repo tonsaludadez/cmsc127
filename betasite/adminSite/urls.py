@@ -47,4 +47,8 @@ urlpatterns = [
     url(r'^report/duePayment/$',views.DuePaymentsGenerator.as_view(), name='duePaymentsGenerator'),
     url(r'^report/duePayment/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/$', views.DuePayments.as_view(month_format='%m'), name="duePayments"),
     url(r'^report/duePayment/submit/$', views.redirectDuePayments, name="duePaymentsSubmit"),
+    url(r'^report/coordinatorList/$',views.CoordinatorListGenerator.as_view(), name='coordinatorListGenerator'),
+    url(r'^report/coordinatorList/submit/$', views.redirectCoordinatorList, name="coordinatorListSubmit"),
+    url(r'^report/coordinatorList/(?P<pk>[0-9]+)/$', views.CoordinatorList.as_view(), name="coordinatorList"),
+
 ]

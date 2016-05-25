@@ -378,6 +378,34 @@ class EventView(LoginRequiredMixin, DetailView):
 
 		return context
 
+class CoordinatorListGenerator(LoginRequiredMixin, TemplateView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:coordinatorListGenerator'
+	template_name = 'adminSite/coordinatorListGenerator.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(CoordinatorListGenerator, self).get_context_data(**kwargs)
+		context['classes'] = Class.objects.all()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
+
+class CoordinatorList(LoginRequiredMixin, DetailView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:coordinatorList'
+	template_name = 'adminSite/coordinatorList.html'
+	model = Class
+	context_object_name = 'class'
+
+	def get_context_data(self, **kwargs):
+		context = super(CoordinatorList, self).get_context_data(**kwargs)
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		
+
+		return context
+
 class EventReportGenerator(LoginRequiredMixin, TemplateView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:eventReportGenerator'
@@ -806,3 +834,7 @@ def redirectToAnnualYear(request):
 @login_required(login_url='mainSite:home')
 def redirectDuePayments(request):
 	return redirect('adminSite:duePayments', request.POST['year'], request.POST['month'])
+
+@login_required(login_url='mainSite:home')
+def redirectCoordinatorList(request):
+	return redirect('adminSite:coordinatorList', request.POST['class_field'])

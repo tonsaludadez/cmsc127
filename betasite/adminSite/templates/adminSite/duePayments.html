@@ -1,7 +1,7 @@
 {% extends 'adminSite/base.html' %}
 {% load staticfiles %}
 {% load sum %}
-{% block title %}Beta University Admin: HELLO WORLD{% endblock %}
+{% block title %}Beta University Admin: Due Payments{% endblock %}
 
 {% block style %}{% endblock %}
 
@@ -11,7 +11,7 @@
 		<div class="row">
 			<div class="column"></div>
 			<div class="column">
-				<h2>Donations</h2>
+				<h2>Due Payments</h2>
 			</div>
 		</div>
 		<div class="row">
@@ -26,34 +26,28 @@
 				      <th>Amount Payed</th>
 				      <th>Balance</th>
 				      <th>Date Last Payed</th>
-				      {% if not is_not_authorized %}
-				      <th>Delete</th>
-				      {% endif %}
 				    </tr>
 				  </thead>
 				  <tbody>
-				    {% for key, value in donors.items %}
-				    {% if value < plegdes.items.key %}
+				    {% for donation in donations %}
+					    {% with payed=donation.transactions.all|summation %}
+					    {% if payed < donation.amount %}
 				    <tr>
-				    	<td>{{ key }}</td>
-				    	<td>{{ value }}</td>
-					    {% if not is_not_authorized %}
-					    <td>
-								<a href="#"><i class="trash icon"></i></a>
-						</td>
-						{% endif %}
+					    <td><a href="{% url 'adminSite:donation' donation.donationno %}">{{ donation.donationno }}</a></td>
+					    <td><a href="{% url 'adminSite:donor' donation.donorid.donorid %}">{{ donation.donorid.lname }}, {{ donation.donorid.fname }} {{ donation.donorid.mname }}</a></td>
+					    <td>{{ donation.amount }} PHP</td>
+					    <td>{{ payed }} PHP</td>
+					    <td>{{ donation.amount|sub:payed }} PHP</td>
+					    <td>{{ donation.transactions.all.last.date_paid }}</td>
+					   
 					</tr>
 					{% endif %}
+					 {% endwith %}
 				    {% endfor %}
 				  </tbody>
 				   <tfoot>
 				    <tr>
 				    	<th colspan="10">
-				    		{% if not is_not_authorized %}
-				    		<div class="ui left floated small primary labeled icon button" id="addDonation">
-					        	<i class="dollar icon"></i> Add Donation
-					        </div>
-					        {% endif %}
 					      	<div class="ui right floated pagination menu">
 					        	<a class="icon item">
 					          		<i class="left chevron icon"></i>
@@ -74,9 +68,6 @@
 
 {% block scripts %}
 	<script type="text/javascript">
-		$('#addDonation').click(function() {
-			location.href = "{% url 'adminSite:addDonation' %}"
-		});
 		$('.sortable.table').tablesort();
 	</script>
 {% endblock %}

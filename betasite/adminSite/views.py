@@ -414,14 +414,19 @@ class SearchDonor(LoginRequiredMixin, ListView):
 
 	def get_queryset(self):
 		queryset = super(SearchDonor, self).get_queryset()
-		fname = queryset.filter(fname__icontains=self.request.GET['search'])
-		lname = queryset.filter(lname__icontains=self.request.GET['search'])
-		queryset = list(chain(fname, lname))
-		return queryset
+		names = self.request.GET['search']
+		names = names.split(' ')
+		toReturn = 0
+		toReturn = []
+		for name in names:
+			fname = queryset.filter(fname__icontains=name)
+			lname = queryset.filter(lname__icontains=name)
+			toReturn = list(chain(fname, lname))
+		return toReturn
 
 	def get_context_data(self, **kwargs):
 		context = super(SearchDonor, self).get_context_data(**kwargs)
-		context['searched'] = self.request.GET['search'][0]
+		context['searched'] = self.request.GET['search']
 
 		return context
 

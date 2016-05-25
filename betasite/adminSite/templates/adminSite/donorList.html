@@ -81,7 +81,7 @@
 	<script type="text/javascript">
 		var content = [
 		{% for donor in object_list %}
-		{title: '{{ donor.lname }}, {{ donor.fname }} {{ donor.mname }}'},
+		{title: '{{ donor.fname }} {{ donor.mname }} {{ donor.lname }}'},
 		{% endfor %}
 		];
 		$('#addDonor').click(function() {

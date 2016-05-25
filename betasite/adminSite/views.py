@@ -48,6 +48,19 @@ class DonorListView(LoginRequiredMixin, ListView):
 
 		return context
 
+class PotentialDonorsView(LoginRequiredMixin, ListView):
+	login_url = 'mainSite:home'
+	redirect_field_name = 'adminSite:potentialDonors'
+	template_name = 'adminSite/potentialDonors.html'
+	model = Donor
+
+	def get_context_data(self, **kwargs):
+		context = super(PotentialDonorsView, self).get_context_data(**kwargs)
+		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
+		context['is_admin'] = not self.request.user.groups.all().exists()
+
+		return context
+
 class EventListView(LoginRequiredMixin, ListView):
 	login_url = 'mainSite:home'
 	redirect_field_name = 'adminSite:eventList'
@@ -363,6 +376,7 @@ class AnnualReport(LoginRequiredMixin, YearArchiveView):
 
 		context['classes'] = classes
 		context['is_admin'] = not self.request.user.groups.all().exists()
+		context['donors'] = Donor.objects.all()
 
 		return context
 
@@ -403,9 +417,20 @@ class CoordinatorList(LoginRequiredMixin, DetailView):
 		context = super(CoordinatorList, self).get_context_data(**kwargs)
 		context['is_not_authorized'] = self.request.user.groups.filter(name='Coordinator').exists()
 		context['is_admin'] = not self.request.user.groups.all().exists()
+		lastyear = {}
+		thisyear = {}
 
-		
+		for donor in context['class'].donors.all():
+			lastyear[donor] = donor.donations.filter(pledge_date__year=2015)
 
+		context['last_year'] = lastyear
+
+		for donor in context['class'].donors.all():
+			thisyear[donor] = donor.donations.filter(pledge_date__year=2016)
+
+		context['this_year'] = thisyear
+
+		print context['this_year']
 		return context
 
 class EventReportGenerator(LoginRequiredMixin, TemplateView):

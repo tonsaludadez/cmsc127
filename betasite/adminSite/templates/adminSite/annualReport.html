@@ -16,6 +16,35 @@
 			<div class="row">
 				<div class="column"></div>
 				<div class="twelve wide column">
+					<h3>Donors</h3>
+					<table class="ui single line table">
+					  <thead>
+					    <tr>
+					      <th>Donor Name</th>
+					      <th>Class Year</th>
+					      <th>Category</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  {% for donor in donors %}
+					  <tr>
+					  	<td>{{ donor.lname }}, {{ donor.fname }} {{ donor.mname }}</td>
+					  	<td>{{ donor.class_field.classyear }}</td>
+					  	{% if not donor.donor_affiliation %}
+					  	<td>Alumni</td>
+					  	{% else %}
+					  	<td>Others</td>
+					  	{% endif %}
+					  </tr>
+					  {% endfor %}
+					  </tbody>
+					   <tfoot></tfoot>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="column"></div>
+				<div class="twelve wide column">
 					<h3>Classes</h3>
 					<table class="ui single line table">
 					  <thead>

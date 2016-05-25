@@ -49,3 +49,20 @@ def month_name(month_number):
 @register.filter(name='get_percent')
 def get_percent(num1, num2):
 	return (num1/num2)*100
+
+@register.filter(name='totalpledges2')
+def total(value):
+	sum = 0
+	for item in value:
+		sum = sum + item.amount
+
+	return sum
+
+@register.filter(name='totalgifts2')
+def totalGifts(value):
+	sum = 0
+	for item in value:
+		for payment in item.transactions.all():
+			sum = sum + payment.amount_paid
+
+	return sum

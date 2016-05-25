@@ -1,5 +1,6 @@
 {% extends 'adminSite/base.html' %}
 {% load staticfiles %}
+{% load sum %}
 {% block title %}Beta University Admin: Coordinator List {{ class.classyear }}{% endblock %}
 
 {% block style %}{% endblock %}
@@ -18,7 +19,7 @@
 				<div class="three wide column"></div>
 				<div class="twelve wide column">
 					<br>
-					<h2>Donors</h2>
+					<h2>Last Year</h2>
 				</div>
 			</div>
 			<div class="row">
@@ -32,20 +33,65 @@
 					      <th>Contact No.</th>
 					      <th>Last Year's Pledge</th>
 					      <th>Last Year's Gift</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					  	{% for key, value in last_year.items %}
+					    <tr>
+					      <td>{{ key.lname }}, {{ key.fname }} {{ key.mname }}</td>
+					      <td>{{ key.address }}
+					      <td>{{ key.contactno }}</td>
+					      <td>{{ value|totalpledges2 }} PHP</td>
+					      <td>{{ value|totalgifts2 }} PHP</td>
+					    </tr>
+					    {% endfor %}
+					  </tbody>
+					   <tfoot>
+					    <tr>
+					    	<th colspan="10">
+						      	<div class="ui right floated pagination menu">
+						        	<a class="icon item">
+						          		<i class="left chevron icon"></i>
+							       	</a>
+							    	<div class="item">1 of 1</div>
+						        	<a class="icon item">
+						         		<i class="right chevron icon"></i>
+						        	</a>
+						      	</div>
+						    </th>
+					  	</tr>
+					  </tfoot>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<br>
+					<h2>This Year</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="three wide column"></div>
+				<div class="twelve wide column">
+					<table class="ui single line table">
+					  <thead>
+					    <tr>
+					      <th>Name</th>
+					      <th>Address</th>
+					      <th>Contact No.</th>
 					      <th>This Year's Pledge</th>
 					      <th>This Year's Gift</th>
 					    </tr>
 					  </thead>
 					  <tbody>
-					  	{% for donor in class.donors.all %}
+					  	{% for key, value in this_year.items %}
 					    <tr>
-					      <td>{{ donor.lname }}, {{ donor.fname }} {{ donor.mname }}</td>
-					      <td>{{ donor.address }}
-					      <td>{{ donor.contactno }}</td>
-					      <td></td>
-					      <td></td>
-					      <td></td>
-					      <td></td>
+					      <td>{{ key.lname }}, {{ key.fname }} {{ key.mname }}</td>
+					      <td>{{ key.address }}
+					      <td>{{ key.contactno }}</td>
+					      <td>{{ value|totalpledges2 }} PHP</td>
+					      <td>{{ value|totalgifts2 }} PHP</td>
 					    </tr>
 					    {% endfor %}
 					  </tbody>

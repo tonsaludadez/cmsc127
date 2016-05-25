@@ -51,5 +51,6 @@ urlpatterns = [
     url(r'^report/coordinatorList/$',views.CoordinatorListGenerator.as_view(), name='coordinatorListGenerator'),
     url(r'^report/coordinatorList/submit/$', views.redirectCoordinatorList, name="coordinatorListSubmit"),
     url(r'^report/coordinatorList/(?P<pk>[0-9]+)/$', views.CoordinatorList.as_view(), name="coordinatorList"),
+    url(r'^report/potentialDonors/$', views.PotentialDonorsView.as_view(), name="potentialDonors"),
 
 ]
